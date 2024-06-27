@@ -38,4 +38,9 @@
 <!--        <item name="fontFamily">@font/product_sans_bold</item>-->
         <item name="android:textSize">28sp</item>
     </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@color/dark_blue_200</item>
+        <item name="colorControlNormal">@color/dark_blue_200</item> <!-- Color of the back button -->
+    </style>
 </resources>
