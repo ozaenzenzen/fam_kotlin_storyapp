@@ -4,7 +4,7 @@
     <string name="signup">Daftar</string>
     <string name="login">Masuk</string>
     <!--    <string name="message_welcome_page">Mau belajar Android, iOS, Machine Learning, Cloud, Front-End, Back-End, dan bidang IT lainnya? Di Dicoding aja!</string>-->
-    <!--    <string name="title_welcome_page">Selamat datang di Dicoding!</string>-->
+
     <string name="title_signup_page">Lengkapi data dirimu di bawah ini ya</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -71,4 +71,8 @@
     <string name="cancel">Cancel</string>
     <string name="logout_message_success">Logged out successfully</string>
     <string name="please_activate_location_message">Please activate your location services</string>
+
+    //Activity Main
+    <string name="title_welcome_page">Selamat datang di Post Story!</string>
+    <string name="description_welcome_page">Anda dapat melihat linimasa komunitas dan anda dapat menggunggah postingan beserta foto</string>
 </resources>
