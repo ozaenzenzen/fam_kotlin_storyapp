@@ -59,4 +59,16 @@ dependencies {
 
     // Image
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    // Data Store
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    // Room
+    // implementation(libs.androidx.room.runtime)
+    // ksp(libs.room.compiler)
 }
