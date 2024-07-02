@@ -2,6 +2,7 @@ package com.example.famstoryappkotlin.ui.register
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -9,36 +10,50 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.get
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.famgithubuser1.data.retrofit.ApiService
-import com.example.famstoryappkotlin.R
+import com.example.famgithubuser1.data.retrofit.ApiConfig
+import com.example.famstoryappkotlin.data.factory.ViewModelFactory
 import com.example.famstoryappkotlin.data.local.preferences.UserDataPreferences
+import com.example.famstoryappkotlin.data.local.preferences.dataStore
 import com.example.famstoryappkotlin.data.repository.AuthRepository
+import com.example.famstoryappkotlin.data.repository.StoryRepository
 import com.example.famstoryappkotlin.databinding.ActivityRegisterBinding
-import com.example.famstoryappkotlin.ui.home.HomeActivity
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.security.auth.callback.Callback
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
 
     // private val viewModel: RegisterViewModel by viewModels()
     private lateinit var viewModel: RegisterViewModel
+
+    private lateinit var authRepository: AuthRepository
+    private lateinit var storyRepository: StoryRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupViewModel()
         setupView()
         setupAction()
         playAnimation()
+    }
+
+    private fun setupViewModel() {
+        var pref = UserDataPreferences.getInstance(application.dataStore)
+
+        var apiService = ApiConfig.getApiService()
+
+        authRepository = AuthRepository(apiService, pref)
+        storyRepository = StoryRepository(apiService)
+
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(authRepository, storyRepository)
+        ).get(RegisterViewModel::class.java)
     }
 
     private fun registerInputHandler() {
@@ -53,21 +68,20 @@ class RegisterActivity : AppCompatActivity() {
                     showAlertDialog(
                         "Berhasil",
                         "Register Berhasil",
-                        "Lanjutkan",
-//                        {
-////                            finish()
-//                        }
-                    )
+                        "Lanjutkan"
+                    ) {
+                        finish()
+                    }
                 }
                 result.onFailure {
+                    pageLoadingHandler(false)
                     showAlertDialog(
                         "Gagal",
                         "Register Gagal",
                         "Kembali",
-//                        {
-//
-//                        }
-                    )
+                        ) { dialog ->
+                        dialog.cancel()
+                    }
                 }
             }
         }
@@ -81,23 +95,23 @@ class RegisterActivity : AppCompatActivity() {
         }.start()
 
         val titleTextView =
-            ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(300)
 
         val nameTextView =
-            ObjectAnimator.ofFloat(binding.tvRegisterName, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.tvRegisterName, View.ALPHA, 1f).setDuration(300)
         val nameEditTextLayout =
-            ObjectAnimator.ofFloat(binding.edRegisterName, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.edRegisterName, View.ALPHA, 1f).setDuration(300)
         val emailTextView =
-            ObjectAnimator.ofFloat(binding.tvRegisterEmail, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.tvRegisterEmail, View.ALPHA, 1f).setDuration(300)
         val emailEditTextLayout =
-            ObjectAnimator.ofFloat(binding.edRegisterEmail, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.edRegisterEmail, View.ALPHA, 1f).setDuration(300)
         val passwordTextView =
-            ObjectAnimator.ofFloat(binding.tvRegisterPassword, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.tvRegisterPassword, View.ALPHA, 1f).setDuration(300)
         val passwordEditTextLayout =
-            ObjectAnimator.ofFloat(binding.edRegisterPassword, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.edRegisterPassword, View.ALPHA, 1f).setDuration(300)
 
         val signupButton =
-            ObjectAnimator.ofFloat(binding.signupButton, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.signupButton, View.ALPHA, 1f).setDuration(300)
 
         val togetherTitle = AnimatorSet().apply {
             playTogether(nameTextView, nameEditTextLayout)
@@ -183,17 +197,18 @@ class RegisterActivity : AppCompatActivity() {
         title: String,
         message: String,
         positiveButtonText: String,
-//        callback: () -> Unit,
+        callback: (dialog: DialogInterface) -> Unit,
     ) {
         val alertDialog = AlertDialog.Builder(this).apply {
             setTitle(title)
             setMessage(message)
-            setPositiveButton(positiveButtonText) { _, _ ->
-//                callback
+            setPositiveButton(positiveButtonText) { dialog, which ->
+                callback(dialog)
 //                val intent = Intent(context, HomeActivity::class.java)
 //                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 //                startActivity(intent)
-                finish()
+//                finish()
+//                dialog.cancel()
             }
             create()
             show()

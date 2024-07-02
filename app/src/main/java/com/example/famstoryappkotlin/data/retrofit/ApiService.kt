@@ -26,16 +26,16 @@ interface ApiService {
     @FormUrlEncoded
     @POST("register")
     suspend fun register(
-        @Body name: String,
-        @Body email: String,
-        @Body password: String,
+        @Field("name") name: String,
+        @Field("email") email: String,
+        @Field("password") password: String,
     ): RegisterResponseModel
 
     @FormUrlEncoded
     @POST("login")
     suspend fun login(
-        @Body email: String,
-        @Body password: String,
+        @Field("email") email: String,
+        @Field("password") password: String,
     ): LoginResponseModel
 
     @Multipart
