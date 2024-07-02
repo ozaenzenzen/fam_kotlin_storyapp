@@ -126,15 +126,19 @@ class LoginActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.login(email, password).collect { result ->
-                result.onSuccess {
-                    showAlertDialog(
-                        "Berhasil",
-                        "Login Berhasil",
-                        "Lanjutkan"
-                    ) {
-                        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
+                result.onSuccess { data ->
+                    data.loginResult?.token?.let { token ->
+                        showAlertDialog(
+                            "Berhasil",
+                            "Login Berhasil",
+                            "Lanjutkan"
+                        ) {
+                            viewModel.saveAuthenticationToken(token)
+                            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                        }
                     }
                 }
                 result.onFailure {
