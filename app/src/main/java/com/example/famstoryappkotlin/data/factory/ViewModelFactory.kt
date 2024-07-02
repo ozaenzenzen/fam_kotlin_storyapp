@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.famstoryappkotlin.data.repository.AuthRepository
 import com.example.famstoryappkotlin.data.repository.StoryRepository
 import com.example.famstoryappkotlin.ui.login.LoginViewModel
+import com.example.famstoryappkotlin.ui.main.MainViewModel
 import com.example.famstoryappkotlin.ui.register.RegisterViewModel
 
 class ViewModelFactory(
@@ -17,6 +18,8 @@ class ViewModelFactory(
             return RegisterViewModel(authRepository) as T
         } else if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(authRepository) as T
+        } else if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+            return MainViewModel(authRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

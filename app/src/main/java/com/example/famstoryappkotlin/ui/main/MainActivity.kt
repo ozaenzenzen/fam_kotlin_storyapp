@@ -6,23 +6,73 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.famgithubuser1.data.retrofit.ApiConfig
 import com.example.famstoryappkotlin.R
+import com.example.famstoryappkotlin.data.factory.ViewModelFactory
+import com.example.famstoryappkotlin.data.local.preferences.UserDataPreferences
+import com.example.famstoryappkotlin.data.local.preferences.dataStore
+import com.example.famstoryappkotlin.data.repository.AuthRepository
+import com.example.famstoryappkotlin.data.repository.StoryRepository
 import com.example.famstoryappkotlin.databinding.ActivityMainBinding
 import com.example.famstoryappkotlin.ui.addstory.AddStoryActivity
+import com.example.famstoryappkotlin.ui.home.HomeActivity
 import com.example.famstoryappkotlin.ui.login.LoginActivity
+import com.example.famstoryappkotlin.ui.login.LoginViewModel
 import com.example.famstoryappkotlin.ui.register.RegisterActivity
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var viewModel: MainViewModel
+
+    private lateinit var authRepository: AuthRepository
+    private lateinit var storyRepository: StoryRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupViewModel()
+        onInit()
         setupView()
         setupAction()
         playAnimation()
+    }
+
+    private fun setupViewModel() {
+        var pref = UserDataPreferences.getInstance(application.dataStore)
+
+        var apiService = ApiConfig.getApiService()
+
+        authRepository = AuthRepository(apiService, pref)
+        storyRepository = StoryRepository(apiService)
+
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(authRepository, storyRepository)
+        ).get(MainViewModel::class.java)
+    }
+
+    private fun onInit() {
+        lifecycleScope.launchWhenCreated {
+            launch {
+                viewModel.getAuthenticationToken().collect { token ->
+                    if (token.isNullOrEmpty()) {
+//                        val intent = Intent(this@MainActivity, MainActivity::class.java)
+//                        startActivity(intent)
+                    } else {
+                        val intent = Intent(this@MainActivity, HomeActivity::class.java)
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    }
+                }
+            }
+        }
     }
 
     private fun setupView() {
