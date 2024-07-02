@@ -56,36 +56,6 @@ class RegisterActivity : AppCompatActivity() {
         ).get(RegisterViewModel::class.java)
     }
 
-    private fun registerInputHandler() {
-        val name = binding.nameEditText.text.toString().trim()
-        val email = binding.emailEditText.text.toString().trim()
-        val password = binding.passwordEditText.text.toString().trim()
-        pageLoadingHandler(true)
-
-        lifecycleScope.launch {
-            viewModel.register(name, email, password).collect { result ->
-                result.onSuccess {
-                    showAlertDialog(
-                        "Berhasil",
-                        "Register Berhasil",
-                        "Lanjutkan"
-                    ) {
-                        finish()
-                    }
-                }
-                result.onFailure {
-                    pageLoadingHandler(false)
-                    showAlertDialog(
-                        "Gagal",
-                        "Register Gagal",
-                        "Kembali",
-                        ) { dialog ->
-                        dialog.cancel()
-                    }
-                }
-            }
-        }
-    }
 
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
@@ -166,6 +136,37 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    private fun registerInputHandler() {
+        val name = binding.nameEditText.text.toString().trim()
+        val email = binding.emailEditText.text.toString().trim()
+        val password = binding.passwordEditText.text.toString().trim()
+        pageLoadingHandler(true)
+
+        lifecycleScope.launch {
+            viewModel.register(name, email, password).collect { result ->
+                result.onSuccess {
+                    showAlertDialog(
+                        "Berhasil",
+                        "Register Berhasil",
+                        "Lanjutkan"
+                    ) {
+                        finish()
+                    }
+                }
+                result.onFailure {
+                    pageLoadingHandler(false)
+                    showAlertDialog(
+                        "Gagal",
+                        "Register Gagal",
+                        "Kembali",
+                    ) { dialog ->
+                        dialog.cancel()
+                    }
+                }
+            }
+        }
+    }
+
     private fun pageLoadingHandler(isLoading: Boolean) {
         binding.apply {
             emailEditText.isEnabled = !isLoading
@@ -174,7 +175,7 @@ class RegisterActivity : AppCompatActivity() {
             signupButton.isEnabled = !isLoading
 
             if (isLoading) {
-                // viewLoading.visibility = true
+//                 viewLoading.visibility = true
                 viewLoading.apply {
                     ObjectAnimator
                         .ofFloat(this, View.ALPHA, if (true) 1f else 0f)
