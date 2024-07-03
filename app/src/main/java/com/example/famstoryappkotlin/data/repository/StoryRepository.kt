@@ -20,16 +20,17 @@ class StoryRepository(private val apiService: ApiService) {
         long: RequestBody? = null
     ): Flow<Result<AddStoryResponseModel>> = flow {
         try {
+            val bearerToken = "Bearer $token"
             val response = apiService.addStory(
-                token,
-                description,
+                bearerToken,
                 photo,
+                description,
                 lat,
                 long,
             )
             emit(Result.success(response))
         } catch (e: Exception) {
-            Log.e("login", e.message.toString())
+            Log.e("addStory", e.message.toString())
             emit(Result.failure(e))
         }
     }
@@ -40,7 +41,7 @@ class StoryRepository(private val apiService: ApiService) {
             val response = apiService.getAllStory(bearerToken, size = 30)
             emit(Result.success(response))
         } catch (e: Exception) {
-            Log.e("login", e.message.toString())
+            Log.e("getAllStory", e.message.toString())
             emit(Result.failure(e))
         }
     }
@@ -51,7 +52,7 @@ class StoryRepository(private val apiService: ApiService) {
             val response = apiService.detailStory(bearerToken, id)
             emit(Result.success(response))
         } catch (e: Exception) {
-            Log.e("login", e.message.toString())
+            Log.e("detailStory", e.message.toString())
             emit(Result.failure(e))
         }
     }

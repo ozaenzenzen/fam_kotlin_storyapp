@@ -40,13 +40,14 @@ interface ApiService {
 
     @Multipart
     @POST("stories")
-    @Headers("Content-Type: multipart/form-data")
+    // @Headers("Content-Type: multipart/form-data")
     suspend fun addStory(
         @Header("Authorization") token: String,
-        @Part description: RequestBody,
-        @Part photo: MultipartBody.Part,
-        @Part lat: RequestBody?,
-        @Part long: RequestBody?,
+        // @Part photo: MultipartBody.Part,
+        @Part file: MultipartBody.Part,
+        @Part("description") description: RequestBody,
+        @Part("lat") lat: RequestBody?,
+        @Part("lon") long: RequestBody?,
     ): AddStoryResponseModel
 
     @GET("stories")

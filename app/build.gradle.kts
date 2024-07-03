@@ -77,4 +77,15 @@ dependencies {
     // Room
     // implementation(libs.androidx.room.runtime)
     // ksp(libs.room.compiler)
+
+    // camerax
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.camera.lifecycle)
+    implementation(libs.camera.view)
+
+    // untuk lifecycleScope
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    //EXIF image
+    implementation(libs.androidx.exifinterface)
 }

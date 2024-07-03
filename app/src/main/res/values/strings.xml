@@ -75,4 +75,6 @@
     //Activity Main
     <string name="title_welcome_page">Selamat datang di Post Story!</string>
     <string name="description_welcome_page">Anda dapat melihat linimasa komunitas dan anda dapat menggunggah postingan beserta foto</string>
+
+    <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
 </resources>

@@ -31,7 +31,7 @@ class AuthRepository(
             val response = apiService.register(name, email, password)
             emit(Result.success(response))
         } catch (e: Exception) {
-            Log.e("login", e.message.toString())
+            Log.e("register", e.message.toString())
             emit(Result.failure(e))
         }
     }
