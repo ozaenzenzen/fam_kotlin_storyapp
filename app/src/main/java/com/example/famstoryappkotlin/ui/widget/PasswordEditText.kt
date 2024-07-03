@@ -20,21 +20,15 @@ class PasswordEditText @JvmOverloads constructor(
 
     private lateinit var passwordIconDrawable: Drawable
 
-//    constructor(context: Context) : super(context) {
-//        init()
-//    }
-//
-//    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-//        init()
-//    }
-//
-//    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
-//        context,
-//        attrs,
-//        defStyleAttr
-//    ) {
-//        init()
-//    }
+    private var isPasswordVisible: Boolean = false
+    private var eyeIcon: Drawable? = null
+    private var eyeOffIcon: Drawable? = null
+
+
+    init {
+        init()
+//        setup()
+    }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -58,8 +52,12 @@ class PasswordEditText @JvmOverloads constructor(
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Password validation
                 // Display error automatically if the password doesn't meet certain criteria
-                if (!s.isNullOrEmpty() && s.length < 6)
+                if (!s.isNullOrEmpty() && s.length < 8) {
                     error = context.getString(R.string.et_password_error_message)
+                    setError(error, null)
+                } else {
+                    error = null
+                }
             }
         })
     }
@@ -74,6 +72,38 @@ class PasswordEditText @JvmOverloads constructor(
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        TODO("Not yet implemented")
+        return false
+    }
+
+    private fun setup() {
+        eyeIcon = ContextCompat.getDrawable(context, R.drawable.ic_eye_show)
+        eyeOffIcon = ContextCompat.getDrawable(context, R.drawable.ic_eye_hide)
+
+        setEndIcon()
+        setOnTouchListener { _, event ->
+            if (event.rawX >= (right - compoundPaddingRight)) {
+                togglePasswordVisibility()
+                return@setOnTouchListener true
+            }
+            false
+        }
+    }
+
+    private fun togglePasswordVisibility() {
+        isPasswordVisible = !isPasswordVisible
+        setEndIcon()
+        inputType = if (isPasswordVisible) {
+            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+        } else {
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
+        setSelection(text?.length ?: 0)
+    }
+
+    private fun setEndIcon() {
+        setCompoundDrawablesRelativeWithIntrinsicBounds(
+            null, null,
+            if (isPasswordVisible) eyeIcon else eyeOffIcon, null
+        )
     }
 }

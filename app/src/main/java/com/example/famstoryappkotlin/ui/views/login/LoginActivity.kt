@@ -117,8 +117,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginInputHandler() {
-        val email = binding.emailEditText.text.toString().trim()
-        val password = binding.passwordEditText.text.toString().trim()
+        val email = binding.edLoginEmail.text.toString().trim()
+        val password = binding.edLoginPassword.text.toString().trim()
         pageLoadingHandler(true)
 
         lifecycleScope.launch {
@@ -154,8 +154,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun pageLoadingHandler(isLoading: Boolean) {
         binding.apply {
-            emailEditText.isEnabled = !isLoading
-            passwordEditText.isEnabled = !isLoading
+            edLoginEmail.isEnabled = !isLoading
+            edLoginPassword.isEnabled = !isLoading
             loginButton.isEnabled = !isLoading
 
             if (isLoading) {
