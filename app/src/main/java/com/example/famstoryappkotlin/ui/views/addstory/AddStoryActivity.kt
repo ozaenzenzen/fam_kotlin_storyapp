@@ -145,8 +145,12 @@ class AddStoryActivity : AppCompatActivity() {
         }
 
     private fun startGallery() {
-        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        // pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+        if (!allPermissionGranted()) {
+            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+        } else {
+            launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            // pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+        }
     }
 
     private fun showImage() {
@@ -156,95 +160,113 @@ class AddStoryActivity : AppCompatActivity() {
         }
     }
 
-    private val launcherIntentCamera =
-        registerForActivityResult(ActivityResultContracts.TakePicture())
-        { isSuccess ->
+    private val launcherIntentCamera = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { isSuccess ->
             if (isSuccess) {
                 showImage()
+            } else {
+                currentImageUri = null
             }
         }
 
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//    }
+
     private fun startCamera() {
-        currentImageUri = getImageUri(this)
-        launcherIntentCamera.launch(currentImageUri)
+        if (!allPermissionGranted()) {
+            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+        } else {
+            currentImageUri = getImageUri(this)
+            launcherIntentCamera.launch(currentImageUri)
+        }
     }
 
     private fun uploadImage() {
-        currentImageUri?.let { uri ->
+        if (currentImageUri != null) {
+            currentImageUri?.let { uri ->
 
-            val imageFile = uriToFile(uri, this).reduceFileImage()
-            Log.d("Image File", "showImage: ${imageFile.path}")
-            // val description = "Ini adalah deskripsi gambar"
-            val description = binding.etDescription2.text.toString().trim()
+                val imageFile = uriToFile(uri, this).reduceFileImage()
+                Log.d("Image File", "showImage: ${imageFile.path}")
+                // val description = "Ini adalah deskripsi gambar"
+                val description = binding.etDescription2.text.toString().trim()
 
-            pageLoadingHandler(true)
+                pageLoadingHandler(true)
 
-            val requestBody = description.toRequestBody("text/plain".toMediaType())
-            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
-            val multipartBody = MultipartBody.Part.createFormData(
-                "photo",
-                imageFile.name,
-                requestImageFile
-            )
-            lifecycleScope.launch {
-                launch {
-                    try {
-                        viewModel.getAuthenticationToken().collect { token ->
-                            token.let {
-                                viewModel.addStory(
-                                    it ?: "",
-                                    multipartBody,
-                                    requestBody,
-                                    null,
-                                    null,
-                                )
-                                    .collect { response ->
-                                        response.onSuccess { data ->
-                                            data.let {
-                                                if (it?.error == false) {
-                                                    pageLoadingHandler(false)
-                                                    showAlertDialog(
-                                                        "Berhasil",
-                                                        "Add story berhasil",
-                                                        "Kembali",
-                                                    ) {
-                                                        finish()
-                                                    }
-                                                } else {
-                                                    pageLoadingHandler(false)
-                                                    showAlertDialog(
-                                                        "Gagal",
-                                                        "Add story gagal ${it.message}",
-                                                        "Kembali",
-                                                    ) {
-                                                        it.cancel()
+                val requestBody = description.toRequestBody("text/plain".toMediaType())
+                val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+                val multipartBody = MultipartBody.Part.createFormData(
+                    "photo",
+                    imageFile.name,
+                    requestImageFile
+                )
+                lifecycleScope.launch {
+                    launch {
+                        try {
+                            viewModel.getAuthenticationToken().collect { token ->
+                                token.let {
+                                    viewModel.addStory(
+                                        it ?: "",
+                                        multipartBody,
+                                        requestBody,
+                                        null,
+                                        null,
+                                    )
+                                        .collect { response ->
+                                            response.onSuccess { data ->
+                                                data.let {
+                                                    if (it?.error == false) {
+                                                        pageLoadingHandler(false)
+                                                        showAlertDialog(
+                                                            "Berhasil",
+                                                            "Add story berhasil",
+                                                            "Kembali",
+                                                        ) {
+                                                            finish()
+                                                        }
+                                                    } else {
+                                                        pageLoadingHandler(false)
+                                                        showAlertDialog(
+                                                            "Gagal",
+                                                            "Add story gagal ${it.message}",
+                                                            "Kembali",
+                                                        ) {
+                                                            it.cancel()
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
-                                        response.onFailure {
-                                            pageLoadingHandler(false)
-                                            showAlertDialog(
-                                                "Gagal",
-                                                "Add story gagal ${it.message}",
-                                                "Kembali",
-                                            ) {
-                                                it.cancel()
+                                            response.onFailure {
+                                                pageLoadingHandler(false)
+                                                showAlertDialog(
+                                                    "Gagal",
+                                                    "Add story gagal ${it.message}",
+                                                    "Kembali",
+                                                ) {
+                                                    it.cancel()
+                                                }
                                             }
                                         }
-                                    }
+                                }
                             }
+                        } catch (e: HttpException) {
+                            val errorBody = e.response()?.errorBody()?.string()
+                            val errorResponse =
+                                Gson().fromJson(errorBody, AddStoryResponseModel::class.java)
+                            showToast(errorResponse.message ?: "")
+                            pageLoadingHandler(false)
                         }
-                    } catch (e: HttpException) {
-                        val errorBody = e.response()?.errorBody()?.string()
-                        val errorResponse =
-                            Gson().fromJson(errorBody, AddStoryResponseModel::class.java)
-                        showToast(errorResponse.message ?: "")
-                        pageLoadingHandler(false)
                     }
                 }
-            }
-        } ?: showToast(getString(R.string.empty_image_warning))
+            } ?: showToast(getString(R.string.empty_image_warning))
+        } else {
+            showToast(getString(R.string.empty_image_warning))
+        }
     }
 
     private fun pageLoadingHandler(isLoading: Boolean) {
