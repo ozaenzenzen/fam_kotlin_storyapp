@@ -283,7 +283,6 @@ class AddStoryActivity : AppCompatActivity() {
             setMessage(message)
             setPositiveButton(positiveButtonText) { dialog, which ->
                 callback(dialog)
-                // finish()
             }
             create()
             show()

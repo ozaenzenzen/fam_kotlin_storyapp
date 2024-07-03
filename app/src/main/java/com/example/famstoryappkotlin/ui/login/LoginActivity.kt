@@ -112,9 +112,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
-//            val email = binding.emailEditText.text.toString()
-//            viewModel.saveSession(UserModel(email, "sample_token"))
-//            showAlertDialog()
             loginInputHandler()
         }
     }
@@ -190,7 +187,6 @@ class LoginActivity : AppCompatActivity() {
             setMessage(message)
             setPositiveButton(positiveButtonText) { dialog, which ->
                 callback(dialog)
-                // finish()
             }
             create()
             show()

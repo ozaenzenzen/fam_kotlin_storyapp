@@ -175,7 +175,6 @@ class RegisterActivity : AppCompatActivity() {
             signupButton.isEnabled = !isLoading
 
             if (isLoading) {
-//                 viewLoading.visibility = true
                 viewLoading.apply {
                     ObjectAnimator
                         .ofFloat(this, View.ALPHA, if (true) 1f else 0f)
@@ -183,7 +182,6 @@ class RegisterActivity : AppCompatActivity() {
                         .start()
                 }
             } else {
-                // viewLoading.visibility = false
                 viewLoading.apply {
                     ObjectAnimator
                         .ofFloat(this, View.ALPHA, if (false) 1f else 0f)
@@ -205,11 +203,6 @@ class RegisterActivity : AppCompatActivity() {
             setMessage(message)
             setPositiveButton(positiveButtonText) { dialog, which ->
                 callback(dialog)
-//                val intent = Intent(context, HomeActivity::class.java)
-//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-//                startActivity(intent)
-//                finish()
-//                dialog.cancel()
             }
             create()
             show()
