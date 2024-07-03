@@ -66,6 +66,28 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            launch {
+                pageLoadingHandler(true)
+                viewModel.getAuthenticationToken().collect() { token ->
+                    viewModel.getAllStory(token ?: "").collect { response ->
+                        response.onSuccess { data ->
+                            val emptyList: List<StoryItem?>? = emptyList()
+                            pageLoadingHandler(false)
+                            data.listStory?.let { setRecycleViewData(it) }
+                        }
+                        response.onFailure {
+                            pageLoadingHandler(false)
+                        }
+                    }
+                }
+                pageLoadingHandler(false)
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return true
