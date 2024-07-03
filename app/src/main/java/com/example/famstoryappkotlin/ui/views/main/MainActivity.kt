@@ -1,4 +1,4 @@
-package com.example.famstoryappkotlin.ui.main
+package com.example.famstoryappkotlin.ui.views.main
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -16,11 +16,11 @@ import com.example.famstoryappkotlin.data.local.preferences.dataStore
 import com.example.famstoryappkotlin.data.repository.AuthRepository
 import com.example.famstoryappkotlin.data.repository.StoryRepository
 import com.example.famstoryappkotlin.databinding.ActivityMainBinding
-import com.example.famstoryappkotlin.ui.addstory.AddStoryActivity
-import com.example.famstoryappkotlin.ui.home.HomeActivity
-import com.example.famstoryappkotlin.ui.login.LoginActivity
-import com.example.famstoryappkotlin.ui.login.LoginViewModel
-import com.example.famstoryappkotlin.ui.register.RegisterActivity
+import com.example.famstoryappkotlin.ui.views.addstory.AddStoryActivity
+import com.example.famstoryappkotlin.ui.views.home.HomeActivity
+import com.example.famstoryappkotlin.ui.views.login.LoginActivity
+import com.example.famstoryappkotlin.ui.views.login.LoginViewModel
+import com.example.famstoryappkotlin.ui.views.register.RegisterActivity
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {

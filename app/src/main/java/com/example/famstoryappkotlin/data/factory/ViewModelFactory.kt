@@ -4,12 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.famstoryappkotlin.data.repository.AuthRepository
 import com.example.famstoryappkotlin.data.repository.StoryRepository
-import com.example.famstoryappkotlin.ui.addstory.AddStoryViewModel
-import com.example.famstoryappkotlin.ui.detailstory.DetailStoryViewModel
-import com.example.famstoryappkotlin.ui.home.HomeViewModel
-import com.example.famstoryappkotlin.ui.login.LoginViewModel
-import com.example.famstoryappkotlin.ui.main.MainViewModel
-import com.example.famstoryappkotlin.ui.register.RegisterViewModel
+import com.example.famstoryappkotlin.ui.views.addstory.AddStoryViewModel
+import com.example.famstoryappkotlin.ui.views.detailstory.DetailStoryViewModel
+import com.example.famstoryappkotlin.ui.views.home.HomeViewModel
+import com.example.famstoryappkotlin.ui.views.login.LoginViewModel
+import com.example.famstoryappkotlin.ui.views.main.MainViewModel
+import com.example.famstoryappkotlin.ui.views.register.RegisterViewModel
 
 class ViewModelFactory(
     private val authRepository: AuthRepository,

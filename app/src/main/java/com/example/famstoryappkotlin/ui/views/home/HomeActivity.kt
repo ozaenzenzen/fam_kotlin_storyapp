@@ -1,4 +1,4 @@
-package com.example.famstoryappkotlin.ui.home
+package com.example.famstoryappkotlin.ui.views.home
 
 import android.animation.ObjectAnimator
 import android.content.Intent
@@ -20,9 +20,9 @@ import com.example.famstoryappkotlin.data.repository.AuthRepository
 import com.example.famstoryappkotlin.data.repository.StoryRepository
 import com.example.famstoryappkotlin.data.response.StoryItem
 import com.example.famstoryappkotlin.databinding.ActivityHomeBinding
-import com.example.famstoryappkotlin.ui.addstory.AddStoryActivity
-import com.example.famstoryappkotlin.ui.detailstory.DetailStoryActivity
-import com.example.famstoryappkotlin.ui.main.MainActivity
+import com.example.famstoryappkotlin.ui.views.addstory.AddStoryActivity
+import com.example.famstoryappkotlin.ui.views.detailstory.DetailStoryActivity
+import com.example.famstoryappkotlin.ui.views.main.MainActivity
 import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {

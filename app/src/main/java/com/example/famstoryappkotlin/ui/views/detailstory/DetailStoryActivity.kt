@@ -1,4 +1,4 @@
-package com.example.famstoryappkotlin.ui.detailstory
+package com.example.famstoryappkotlin.ui.views.detailstory
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,7 +13,7 @@ import com.example.famstoryappkotlin.data.local.preferences.dataStore
 import com.example.famstoryappkotlin.data.repository.AuthRepository
 import com.example.famstoryappkotlin.data.repository.StoryRepository
 import com.example.famstoryappkotlin.databinding.ActivityDetailStoryBinding
-import com.example.famstoryappkotlin.ui.home.HomeViewModel
+import com.example.famstoryappkotlin.ui.views.home.HomeViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 

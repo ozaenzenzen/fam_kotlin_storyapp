@@ -1,4 +1,4 @@
-package com.example.famstoryappkotlin.ui.main
+package com.example.famstoryappkotlin.ui.views.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

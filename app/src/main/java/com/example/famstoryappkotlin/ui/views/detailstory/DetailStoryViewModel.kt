@@ -1,4 +1,4 @@
-package com.example.famstoryappkotlin.ui.detailstory
+package com.example.famstoryappkotlin.ui.views.detailstory
 
 import androidx.lifecycle.ViewModel
 import com.example.famstoryappkotlin.data.repository.AuthRepository

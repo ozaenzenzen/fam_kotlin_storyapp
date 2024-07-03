@@ -1,4 +1,4 @@
-package com.example.famstoryappkotlin.ui.register
+package com.example.famstoryappkotlin.ui.views.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -14,26 +14,28 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.famgithubuser1.data.retrofit.ApiConfig
+import com.example.famstoryappkotlin.R
 import com.example.famstoryappkotlin.data.factory.ViewModelFactory
 import com.example.famstoryappkotlin.data.local.preferences.UserDataPreferences
 import com.example.famstoryappkotlin.data.local.preferences.dataStore
 import com.example.famstoryappkotlin.data.repository.AuthRepository
 import com.example.famstoryappkotlin.data.repository.StoryRepository
-import com.example.famstoryappkotlin.databinding.ActivityRegisterBinding
+import com.example.famstoryappkotlin.databinding.ActivityLoginBinding
+import com.example.famstoryappkotlin.ui.views.home.HomeActivity
+import com.example.famstoryappkotlin.ui.views.register.RegisterViewModel
 import kotlinx.coroutines.launch
 
-class RegisterActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityRegisterBinding
+class LoginActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLoginBinding
 
-    // private val viewModel: RegisterViewModel by viewModels()
-    private lateinit var viewModel: RegisterViewModel
+    private lateinit var viewModel: LoginViewModel
 
     private lateinit var authRepository: AuthRepository
     private lateinit var storyRepository: StoryRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupViewModel()
@@ -53,57 +55,46 @@ class RegisterActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(
             this,
             ViewModelFactory(authRepository, storyRepository)
-        ).get(RegisterViewModel::class.java)
+        ).get(LoginViewModel::class.java)
     }
 
-
     private fun playAnimation() {
-        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
+        ObjectAnimator.ofFloat(binding.ivLogin, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 6000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
         val titleTextView =
-            ObjectAnimator.ofFloat(binding.titleTextView, View.ALPHA, 1f).setDuration(300)
+            ObjectAnimator.ofFloat(binding.tvTitle, View.ALPHA, 1f).setDuration(300)
+        val messageTextView =
+            ObjectAnimator.ofFloat(binding.tvMessage, View.ALPHA, 1f).setDuration(300)
 
-        val nameTextView =
-            ObjectAnimator.ofFloat(binding.tvRegisterName, View.ALPHA, 1f).setDuration(300)
-        val nameEditTextLayout =
-            ObjectAnimator.ofFloat(binding.edRegisterName, View.ALPHA, 1f).setDuration(300)
         val emailTextView =
-            ObjectAnimator.ofFloat(binding.tvRegisterEmail, View.ALPHA, 1f).setDuration(300)
+            ObjectAnimator.ofFloat(binding.tvLoginEmail, View.ALPHA, 1f).setDuration(300)
         val emailEditTextLayout =
-            ObjectAnimator.ofFloat(binding.edRegisterEmail, View.ALPHA, 1f).setDuration(300)
+            ObjectAnimator.ofFloat(binding.edLoginEmail, View.ALPHA, 1f).setDuration(300)
+
         val passwordTextView =
-            ObjectAnimator.ofFloat(binding.tvRegisterPassword, View.ALPHA, 1f).setDuration(300)
+            ObjectAnimator.ofFloat(binding.tvLoginPassword, View.ALPHA, 1f).setDuration(300)
         val passwordEditTextLayout =
-            ObjectAnimator.ofFloat(binding.edRegisterPassword, View.ALPHA, 1f).setDuration(300)
+            ObjectAnimator.ofFloat(binding.edLoginPassword, View.ALPHA, 1f).setDuration(300)
 
-        val signupButton =
-            ObjectAnimator.ofFloat(binding.signupButton, View.ALPHA, 1f).setDuration(300)
-
-        val togetherTitle = AnimatorSet().apply {
-            playTogether(nameTextView, nameEditTextLayout)
-        }
-        val togetherEmail = AnimatorSet().apply {
-            playTogether(emailTextView, emailEditTextLayout)
-        }
-        val togetherPassword = AnimatorSet().apply {
-            playTogether(passwordTextView, passwordEditTextLayout)
-        }
+        val loginButton =
+            ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(300)
 
         AnimatorSet().apply {
             playSequentially(
                 titleTextView,
-                togetherTitle,
-                togetherEmail,
-                togetherPassword,
-                signupButton
+                messageTextView,
+                emailTextView,
+                emailEditTextLayout,
+                passwordTextView,
+                passwordEditTextLayout,
+                loginButton,
             )
             start()
         }
-
     }
 
     private fun setupView() {
@@ -120,44 +111,38 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
-        binding.signupButton.setOnClickListener {
-//            val email = binding.emailEditText.text.toString()
-//
-//            AlertDialog.Builder(this).apply {
-//                setTitle("Yeah!")
-//                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
-//                setPositiveButton("Lanjut") { _, _ ->
-//                    finish()
-//                }
-//                create()
-//                show()
-//            }
-            registerInputHandler()
+        binding.loginButton.setOnClickListener {
+            loginInputHandler()
         }
     }
 
-    private fun registerInputHandler() {
-        val name = binding.nameEditText.text.toString().trim()
+    private fun loginInputHandler() {
         val email = binding.emailEditText.text.toString().trim()
         val password = binding.passwordEditText.text.toString().trim()
         pageLoadingHandler(true)
 
         lifecycleScope.launch {
-            viewModel.register(name, email, password).collect { result ->
-                result.onSuccess {
-                    showAlertDialog(
-                        "Berhasil",
-                        "Register Berhasil",
-                        "Lanjutkan"
-                    ) {
-                        finish()
+            viewModel.login(email, password).collect { result ->
+                result.onSuccess { data ->
+                    data.loginResult?.token?.let { token ->
+                        showAlertDialog(
+                            "Berhasil",
+                            "Login Berhasil",
+                            "Lanjutkan"
+                        ) {
+                            viewModel.saveAuthenticationToken(token)
+                            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                        }
                     }
                 }
                 result.onFailure {
                     pageLoadingHandler(false)
                     showAlertDialog(
                         "Gagal",
-                        "Register Gagal",
+                        "Login Gagal",
                         "Kembali",
                     ) { dialog ->
                         dialog.cancel()
@@ -171,8 +156,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.apply {
             emailEditText.isEnabled = !isLoading
             passwordEditText.isEnabled = !isLoading
-            nameEditText.isEnabled = !isLoading
-            signupButton.isEnabled = !isLoading
+            loginButton.isEnabled = !isLoading
 
             if (isLoading) {
                 viewLoading.apply {

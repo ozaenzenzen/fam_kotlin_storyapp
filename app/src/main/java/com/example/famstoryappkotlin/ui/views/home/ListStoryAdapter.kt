@@ -1,4 +1,4 @@
-package com.example.famstoryappkotlin.ui.home
+package com.example.famstoryappkotlin.ui.views.home
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -26,12 +26,12 @@ class ListStoryAdapter : ListAdapter<StoryItem, ListStoryAdapter.MyViewHolder>(D
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ListStoryAdapter.MyViewHolder {
+    ): MyViewHolder {
         val binding = StoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ListStoryAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val itemStory = getItem(position)
         holder.binding.apply {
             holder.binding.tvStoryDescription.text = "${itemStory.description}"

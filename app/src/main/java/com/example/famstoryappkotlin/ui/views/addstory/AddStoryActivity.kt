@@ -1,4 +1,4 @@
-package com.example.famstoryappkotlin.ui.addstory
+package com.example.famstoryappkotlin.ui.views.addstory
 
 import android.Manifest
 import android.animation.ObjectAnimator
@@ -25,7 +25,7 @@ import com.example.famstoryappkotlin.data.repository.AuthRepository
 import com.example.famstoryappkotlin.data.repository.StoryRepository
 import com.example.famstoryappkotlin.data.response.AddStoryResponseModel
 import com.example.famstoryappkotlin.databinding.ActivityAddStoryBinding
-import com.example.famstoryappkotlin.ui.detailstory.DetailStoryViewModel
+import com.example.famstoryappkotlin.ui.views.detailstory.DetailStoryViewModel
 import com.example.famstoryappkotlin.utils.getImageUri
 import com.example.famstoryappkotlin.utils.reduceFileImage
 import com.example.famstoryappkotlin.utils.uriToFile
