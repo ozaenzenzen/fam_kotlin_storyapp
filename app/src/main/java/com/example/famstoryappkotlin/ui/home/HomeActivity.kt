@@ -1,8 +1,10 @@
 package com.example.famstoryappkotlin.ui.home
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,15 +38,20 @@ class HomeActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             launch {
+                pageLoadingHandler(true)
                 viewModel.getAuthenticationToken().collect() { token ->
                     viewModel.getAllStory(token ?: "").collect { response ->
                         response.onSuccess { data ->
                             val emptyList: List<StoryItem?>? = emptyList()
+                            pageLoadingHandler(false)
                             data.listStory?.let { setRecycleViewData(it) }
                         }
-                        response.onFailure { }
+                        response.onFailure {
+                            pageLoadingHandler(false)
+                        }
                     }
                 }
+                pageLoadingHandler(false)
             }
         }
 
@@ -97,6 +104,26 @@ class HomeActivity : AppCompatActivity() {
             putExtra(DetailStoryActivity.EXTRA_DETAIL, story?.id)
         }.also {
             startActivity(it)
+        }
+    }
+
+    private fun pageLoadingHandler(isLoading: Boolean) {
+        binding.apply {
+            if (isLoading) {
+                viewLoading.apply {
+                    ObjectAnimator
+                        .ofFloat(this, View.ALPHA, if (true) 1f else 0f)
+                        .setDuration(400)
+                        .start()
+                }
+            } else {
+                viewLoading.apply {
+                    ObjectAnimator
+                        .ofFloat(this, View.ALPHA, if (false) 1f else 0f)
+                        .setDuration(400)
+                        .start()
+                }
+            }
         }
     }
 
