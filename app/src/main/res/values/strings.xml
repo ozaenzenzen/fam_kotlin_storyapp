@@ -41,4 +41,8 @@
     <string name="dummy_description" translatable="false">Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsu....</string>
     <string name="dummy_date" translatable="false">April 6, 2022</string>
     <string name="story_s_illustration">Story\'s illustration</string>
+
+    //Error Text
+    <string name="et_email_error_message">Alamat email tidak sesuai</string>
+    <string name="et_password_error_message">Kata sandi harus lebih dari 8 karakter</string>
 </resources>
