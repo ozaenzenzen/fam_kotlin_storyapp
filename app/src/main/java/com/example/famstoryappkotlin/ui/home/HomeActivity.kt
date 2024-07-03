@@ -4,11 +4,15 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.famgithubuser1.data.retrofit.ApiConfig
+import com.example.famstoryappkotlin.R
 import com.example.famstoryappkotlin.data.factory.ViewModelFactory
 import com.example.famstoryappkotlin.data.local.preferences.UserDataPreferences
 import com.example.famstoryappkotlin.data.local.preferences.dataStore
@@ -18,6 +22,7 @@ import com.example.famstoryappkotlin.data.response.StoryItem
 import com.example.famstoryappkotlin.databinding.ActivityHomeBinding
 import com.example.famstoryappkotlin.ui.addstory.AddStoryActivity
 import com.example.famstoryappkotlin.ui.detailstory.DetailStoryActivity
+import com.example.famstoryappkotlin.ui.main.MainActivity
 import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {
@@ -58,6 +63,26 @@ class HomeActivity : AppCompatActivity() {
         binding.fabCreateStory.setOnClickListener {
             val intent = Intent(this@HomeActivity, AddStoryActivity::class.java)
             startActivity(intent)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logout -> {
+                viewModel.saveAuthenticationToken("")
+                Intent(this@HomeActivity, MainActivity::class.java).also { intent ->
+                    startActivity(intent)
+                    finish()
+                }
+                return true
+            }
+
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 

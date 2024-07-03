@@ -1,9 +1,11 @@
 package com.example.famstoryappkotlin.ui.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.famstoryappkotlin.data.repository.AuthRepository
 import com.example.famstoryappkotlin.data.repository.StoryRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val authRepository: AuthRepository,
@@ -13,5 +15,11 @@ class HomeViewModel(
 
     fun getAuthenticationToken(): Flow<String?> {
         return authRepository.getAuthenticationToken()
+    }
+
+    fun saveAuthenticationToken(token: String) {
+        viewModelScope.launch {
+            authRepository.saveAuthenticationToken(token)
+        }
     }
 }

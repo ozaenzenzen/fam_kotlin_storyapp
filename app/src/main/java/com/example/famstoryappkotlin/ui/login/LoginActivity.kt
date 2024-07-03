@@ -66,22 +66,22 @@ class LoginActivity : AppCompatActivity() {
         }.start()
 
         val titleTextView =
-            ObjectAnimator.ofFloat(binding.tvTitle, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.tvTitle, View.ALPHA, 1f).setDuration(300)
         val messageTextView =
-            ObjectAnimator.ofFloat(binding.tvMessage, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.tvMessage, View.ALPHA, 1f).setDuration(300)
 
         val emailTextView =
-            ObjectAnimator.ofFloat(binding.tvLoginEmail, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.tvLoginEmail, View.ALPHA, 1f).setDuration(300)
         val emailEditTextLayout =
-            ObjectAnimator.ofFloat(binding.edLoginEmail, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.edLoginEmail, View.ALPHA, 1f).setDuration(300)
 
         val passwordTextView =
-            ObjectAnimator.ofFloat(binding.tvLoginPassword, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.tvLoginPassword, View.ALPHA, 1f).setDuration(300)
         val passwordEditTextLayout =
-            ObjectAnimator.ofFloat(binding.edLoginPassword, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.edLoginPassword, View.ALPHA, 1f).setDuration(300)
 
         val loginButton =
-            ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(500)
+            ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(300)
 
         AnimatorSet().apply {
             playSequentially(
