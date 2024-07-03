@@ -137,9 +137,9 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun registerInputHandler() {
-        val name = binding.nameEditText.text.toString().trim()
-        val email = binding.emailEditText.text.toString().trim()
-        val password = binding.passwordEditText.text.toString().trim()
+        val name = binding.edRegisterName.text.toString().trim()
+        val email = binding.edRegisterEmail.text.toString().trim()
+        val password = binding.edRegisterPassword.text.toString().trim()
         pageLoadingHandler(true)
 
         lifecycleScope.launch {
@@ -169,9 +169,9 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun pageLoadingHandler(isLoading: Boolean) {
         binding.apply {
-            emailEditText.isEnabled = !isLoading
-            passwordEditText.isEnabled = !isLoading
-            nameEditText.isEnabled = !isLoading
+            edRegisterEmail.isEnabled = !isLoading
+            edRegisterPassword.isEnabled = !isLoading
+            edRegisterName.isEnabled = !isLoading
             signupButton.isEnabled = !isLoading
 
             if (isLoading) {
