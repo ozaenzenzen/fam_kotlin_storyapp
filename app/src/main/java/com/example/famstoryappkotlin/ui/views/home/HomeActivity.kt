@@ -11,6 +11,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.famgithubuser1.data.retrofit.ApiConfig
 import com.example.famstoryappkotlin.R
@@ -50,6 +51,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.swipeRefresh.setOnRefreshListener {
+            pageLoadingHandler(true)
             lifecycleHandler()
             binding.swipeRefresh.isRefreshing = false
         }
@@ -60,31 +62,16 @@ class HomeActivity : AppCompatActivity() {
             launch {
                 pageLoadingHandler(true)
                 viewModel.getAuthenticationToken().collect() { token ->
-//                    viewModel.getAllStory3(token!!).observe(this@HomeActivity, { data ->
-//                        pageLoadingHandler(false)
-//                        setRecycleViewData(token!!, data)
-//                    })
                     viewModel.getAllStory2(token ?: "").collect { response ->
                         response.onSuccess { data ->
                             val emptyList: List<StoryItem?>? = emptyList()
                             pageLoadingHandler(false)
                             setRecycleViewData(token!!, data)
-//                            data.let { setRecycleViewData(token!!, it) }
                         }
                         response.onFailure {
                             pageLoadingHandler(false)
                         }
                     }
-//                    viewModel.getAllStory(token ?: "").collect { response ->
-//                        response.onSuccess { data ->
-//                            val emptyList: List<StoryItem?>? = emptyList()
-//                            pageLoadingHandler(false)
-//                            data.listStory?.let { setRecycleViewData(it) }
-//                        }
-//                        response.onFailure {
-//                            pageLoadingHandler(false)
-//                        }
-//                    }
                 }
                 pageLoadingHandler(false)
             }
@@ -149,7 +136,7 @@ class HomeActivity : AppCompatActivity() {
                     listStoryAdapter.retry()
                 }
             )
-            // setHasFixedSize(true)
+             setHasFixedSize(true)
         }
         listStoryAdapter.setOnItemClickCallback(object : ListStoryAdapter.OnItemClickCallback {
             override fun onItemClicked(story: StoryItem) {
