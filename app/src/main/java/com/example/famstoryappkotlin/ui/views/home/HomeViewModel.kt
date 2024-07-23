@@ -22,8 +22,8 @@ class HomeViewModel(
     fun getAllStory2(token: String): Flow<Result<PagingData<StoryItem>>> =
         storyRepository.getAllStory2(token)
 
-//    fun getAllStory3(token: String): LiveData<PagingData<StoryItem>> =
-//        storyRepository.getAllStory3(token).cachedIn(viewModelScope).asLiveData()
+    fun getAllStory3(token: String): LiveData<PagingData<StoryItem>> =
+        storyRepository.getAllStory3(token).cachedIn(viewModelScope).asLiveData()
 
     fun getAuthenticationToken(): Flow<String?> {
         return authRepository.getAuthenticationToken()

@@ -8,6 +8,7 @@
     <string name="name">Nama</string>
     <string name="greeting">Halo %1$s,</string>
     <string name="logout">Keluar</string>
+    <string name="retry">Coba lagi</string>
 
     //Activity Main
     <string name="title_welcome_page">Selamat datang di Post Story!</string>

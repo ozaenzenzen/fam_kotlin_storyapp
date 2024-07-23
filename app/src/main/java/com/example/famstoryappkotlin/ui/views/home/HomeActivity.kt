@@ -42,48 +42,28 @@ class HomeActivity : AppCompatActivity() {
         setToolbar("For Your Page")
         setupViewModel()
 
-        lifecycleScope.launch {
-            launch {
-                pageLoadingHandler(true)
-                viewModel.getAuthenticationToken().collect() { token ->
-                    viewModel.getAllStory2(token ?: "").collect { response ->
-                        response.onSuccess { data ->
-                            val emptyList: List<StoryItem?>? = emptyList()
-                            pageLoadingHandler(false)
-                            setRecycleViewData(token!!, data)
-//                            data.let { setRecycleViewData(token!!, it) }
-                        }
-                        response.onFailure {
-                            pageLoadingHandler(false)
-                        }
-                    }
-//                    viewModel.getAllStory(token ?: "").collect { response ->
-//                        response.onSuccess { data ->
-//                            val emptyList: List<StoryItem?>? = emptyList()
-//                            pageLoadingHandler(false)
-//                            data.listStory?.let { setRecycleViewData(it) }
-//                        }
-//                        response.onFailure {
-//                            pageLoadingHandler(false)
-//                        }
-//                    }
-                }
-                pageLoadingHandler(false)
-            }
-        }
+        lifecycleHandler()
 
         binding.fabCreateStory.setOnClickListener {
             val intent = Intent(this@HomeActivity, AddStoryActivity::class.java)
             startActivity(intent)
         }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            lifecycleHandler()
+            binding.swipeRefresh.isRefreshing = false
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun lifecycleHandler() {
         lifecycleScope.launch {
             launch {
                 pageLoadingHandler(true)
                 viewModel.getAuthenticationToken().collect() { token ->
+//                    viewModel.getAllStory3(token!!).observe(this@HomeActivity, { data ->
+//                        pageLoadingHandler(false)
+//                        setRecycleViewData(token!!, data)
+//                    })
                     viewModel.getAllStory2(token ?: "").collect { response ->
                         response.onSuccess { data ->
                             val emptyList: List<StoryItem?>? = emptyList()
@@ -109,6 +89,11 @@ class HomeActivity : AppCompatActivity() {
                 pageLoadingHandler(false)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleHandler()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -159,7 +144,11 @@ class HomeActivity : AppCompatActivity() {
         listStoryAdapter.submitData(lifecycle, listStoryData)
         binding.rvStories.apply {
             layoutManager = LinearLayoutManager(this@HomeActivity)
-            adapter = listStoryAdapter
+            adapter = listStoryAdapter.withLoadStateFooter(
+                footer = LoadingStateAdapter {
+                    listStoryAdapter.retry()
+                }
+            )
             // setHasFixedSize(true)
         }
         listStoryAdapter.setOnItemClickCallback(object : ListStoryAdapter.OnItemClickCallback {
