@@ -1,11 +1,18 @@
 package com.example.famstoryappkotlin.data.repository
 
 import android.util.Log
+import androidx.lifecycle.asFlow
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.example.famgithubuser1.data.retrofit.ApiService
+import com.example.famstoryappkotlin.data.paging.StoryPagingSource
 import com.example.famstoryappkotlin.data.response.AddStoryResponseModel
 import com.example.famstoryappkotlin.data.response.DetailStoryResponseModel
 import com.example.famstoryappkotlin.data.response.GetAllStoryResponseModel
 import com.example.famstoryappkotlin.data.response.LoginResponseModel
+import com.example.famstoryappkotlin.data.response.StoryItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
@@ -44,6 +51,40 @@ class StoryRepository(private val apiService: ApiService) {
             Log.e("getAllStory", e.message.toString())
             emit(Result.failure(e))
         }
+    }
+
+    fun getAllStory2(token: String): Flow<Result<PagingData<StoryItem>>> = flow {
+        try {
+            val bearerToken = "Bearer $token"
+            val pager = Pager(
+                config = PagingConfig(
+                    pageSize = 5,
+                ),
+                pagingSourceFactory = {
+                    StoryPagingSource(apiService = apiService, bearerToken)
+                }
+            ).flow.collect { data ->
+                emit(Result.success(data))
+            }
+
+        } catch (e: Exception) {
+            Log.e("getAllStory", e.message.toString())
+            emit(Result.failure(e))
+        }
+    }
+
+    fun getAllStory3(token: String): Flow<PagingData<StoryItem>> {
+        val bearerToken = "Bearer $token"
+        val pager = Pager(
+            config = PagingConfig(
+                pageSize = 5,
+            ),
+            pagingSourceFactory = {
+                StoryPagingSource(apiService = apiService, bearerToken)
+            }
+        ).flow
+
+        return pager
     }
 
     fun detailStory(token: String, id: String): Flow<Result<DetailStoryResponseModel>> = flow {

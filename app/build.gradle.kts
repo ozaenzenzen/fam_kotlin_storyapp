@@ -88,4 +88,7 @@ dependencies {
 
     //EXIF image
     implementation(libs.androidx.exifinterface)
+
+    //Paging 3
+    implementation(libs.androidx.paging.runtime.ktx)
 }

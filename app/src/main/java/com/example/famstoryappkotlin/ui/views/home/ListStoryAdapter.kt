@@ -3,6 +3,7 @@ package com.example.famstoryappkotlin.ui.views.home
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,7 @@ import com.example.famstoryappkotlin.data.response.StoryItem
 import com.example.famstoryappkotlin.databinding.StoryItemBinding
 import com.example.famstoryappkotlin.utils.localDateFormat
 
-class ListStoryAdapter : ListAdapter<StoryItem, ListStoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class ListStoryAdapter : PagingDataAdapter<StoryItem, ListStoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
     class MyViewHolder(val binding: StoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
         //
     }
@@ -34,17 +35,17 @@ class ListStoryAdapter : ListAdapter<StoryItem, ListStoryAdapter.MyViewHolder>(D
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val itemStory = getItem(position)
         holder.binding.apply {
-            holder.binding.tvStoryDescription.text = "${itemStory.description}"
-            holder.binding.tvStoryUsername.text = "${itemStory.name}"
-            holder.binding.tvStoryDate.text = localDateFormat("${itemStory.createdAt}")
+            holder.binding.tvStoryDescription.text = "${itemStory?.description}"
+            holder.binding.tvStoryUsername.text = "${itemStory?.name}"
+            holder.binding.tvStoryDate.text = localDateFormat("${itemStory?.createdAt}")
             Glide
                 .with(holder.itemView.context)
-                .load(itemStory.photoUrl.toString())
+                .load(itemStory?.photoUrl.toString())
                 .placeholder(R.drawable.image_item2)
                 .into(holder.binding.ivStoryImage)
         }
 
-        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(itemStory) }
+        holder.itemView.setOnClickListener { onItemClickCallback.onItemClicked(itemStory!!) }
     }
 
     companion object {
