@@ -2,6 +2,7 @@ package com.example.famstoryappkotlin.ui.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.FrameLayout
@@ -9,6 +10,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.example.famstoryappkotlin.R
+import com.example.famstoryappkotlin.data.response.DetailStoryResponseModel
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -23,11 +25,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
 
+    private lateinit var dataDetailStory: DetailStoryResponseModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        dataDetailStory = intent.getParcelableExtra<DetailStoryResponseModel>("dataDetail")!!
+        // Log.d("detailStory", "data: ${detailStory}")
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -103,5 +110,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isIndoorLevelPickerEnabled = true
         mMap.uiSettings.isCompassEnabled = true
         mMap.uiSettings.isMapToolbarEnabled = true
+
+//        val dicodingSpace = LatLng(-6.8957643, 107.6338462)
+        val dicodingSpace = LatLng(dataDetailStory.story?.lat.toString().toDouble(), dataDetailStory.story?.lon.toString().toDouble())
+        mMap.addMarker(
+            MarkerOptions()
+                .position(dicodingSpace)
+                .title("The Location")
+                .snippet("Lat: ${dataDetailStory.story?.lat} Long: ${dataDetailStory.story?.lon}")
+        )
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(dicodingSpace, 15f))
     }
 }

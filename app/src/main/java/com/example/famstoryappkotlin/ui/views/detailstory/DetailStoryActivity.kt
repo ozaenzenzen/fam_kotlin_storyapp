@@ -34,7 +34,9 @@ class DetailStoryActivity : AppCompatActivity() {
     private var idStory: String? = null
 
 //    private var lat: Double? = null
-//    private var long: Double? = null
+//    private var long: Double? =
+
+    private lateinit var detailStoryDatas: DetailStoryResponseModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +55,7 @@ class DetailStoryActivity : AppCompatActivity() {
                         viewModel.detailStory(it, idStory!!).collect { response ->
                             response.onSuccess { detailStoryData ->
                                 detailStoryData.let { it ->
+                                    detailStoryDatas = it
                                     checkIsAnyLocationValue(it)
                                     binding.tvDetailName.text = it.story?.name
                                     binding.tvDetailDescription.text = it.story?.description
@@ -72,8 +75,12 @@ class DetailStoryActivity : AppCompatActivity() {
 
         binding.mapsButton.apply {
             setOnClickListener {
-                val intent = Intent(this@DetailStoryActivity, MapsActivity::class.java)
-                startActivity(intent)
+                Intent(this@DetailStoryActivity, MapsActivity::class.java).apply{
+                    putExtra("dataDetail", detailStoryDatas)
+                }.also {
+                    startActivity(it)
+                }
+
             }
         }
     }
