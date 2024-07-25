@@ -49,14 +49,9 @@ class HomeActivity : AppCompatActivity() {
         setToolbar("For Your Page")
         setupViewModel()
 
-        binding.swipeRefresh.setOnRefreshListener {
-            pageLoadingHandler(true)
-            lifecycleHandler()
-            binding.swipeRefresh.isRefreshing = false
-        }
-
+        setupPullToRefresh()
         setRecycleViewData()
-        lifecycleHandler()
+        lifecycleHandlerGetAllStories()
 
         binding.fabCreateStory.setOnClickListener {
             val intent = Intent(this@HomeActivity, AddStoryActivity::class.java)
@@ -64,7 +59,15 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun lifecycleHandler() {
+    private fun setupPullToRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            pageLoadingHandler(true)
+            lifecycleHandlerGetAllStories()
+            binding.swipeRefresh.isRefreshing = false
+        }
+    }
+
+    private fun lifecycleHandlerGetAllStories() {
         lifecycleScope.launch {
             launch {
                 pageLoadingHandler(true)
@@ -83,11 +86,6 @@ class HomeActivity : AppCompatActivity() {
                 pageLoadingHandler(false)
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        lifecycleHandler()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -134,12 +132,15 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setRecycleViewData() {
+        val linearLayoutManager = LinearLayoutManager(this@HomeActivity)
         listStoryAdapter = ListStoryAdapter()
-//        listStoryAdapter.submitData(lifecycle, listStoryData)
+
+        // Pager Load State
         listStoryAdapter.addLoadStateListener { loadState ->
             if ((loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && listStoryAdapter.itemCount < 1) || loadState.source.refresh is LoadState.Error) {
                 // List empty or error
                 binding?.apply {
+//                    pageLoadingHandler(false)
 //                    tvNotFoundError.animateVisibility(true)
 //                    ivNotFoundError.animateVisibility(true)
 //                    rvStories.animateVisibility(false)
@@ -147,6 +148,7 @@ class HomeActivity : AppCompatActivity() {
             } else {
                 // List not empty
                 binding?.apply {
+//                    pageLoadingHandler(true)
 //                    tvNotFoundError.animateVisibility(false)
 //                    ivNotFoundError.animateVisibility(false)
 //                    rvStories.animateVisibility(true)
@@ -163,7 +165,7 @@ class HomeActivity : AppCompatActivity() {
                         listStoryAdapter.retry()
                     }
                 )
-                layoutManager = LinearLayoutManager(this@HomeActivity)
+                layoutManager = linearLayoutManager
             }
 //            binding.rvStories.apply {
 //                layoutManager = LinearLayoutManager(this@HomeActivity)

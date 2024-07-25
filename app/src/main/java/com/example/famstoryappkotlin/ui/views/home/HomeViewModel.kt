@@ -18,7 +18,7 @@ class HomeViewModel(
 ) : ViewModel() {
     suspend fun getAllStory(token: String) = storyRepository.getAllStory(token)
 
-    fun getAllStory2(token: String): Flow<Result<PagingData<StoryItem>>> =
+    suspend fun getAllStory2(token: String): Flow<Result<PagingData<StoryItem>>> =
         storyRepository.getAllStory2(token)
 
     fun getAllStory3(token: String): LiveData<PagingData<StoryItem>> =
