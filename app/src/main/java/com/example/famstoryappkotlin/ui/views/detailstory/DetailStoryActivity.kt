@@ -33,9 +33,6 @@ class DetailStoryActivity : AppCompatActivity() {
 
     private var idStory: String? = null
 
-//    private var lat: Double? = null
-//    private var long: Double? =
-
     private lateinit var detailStoryDatas: DetailStoryResponseModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

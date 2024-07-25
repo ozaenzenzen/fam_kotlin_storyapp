@@ -65,7 +65,6 @@ class HomeActivity : AppCompatActivity() {
 
         binding.fabCreateStory.setOnClickListener {
             val intent = Intent(this@HomeActivity, AddStoryActivity::class.java)
-            // startActivity(intent)
             startActivityForUpload.launch(intent)
         }
     }
@@ -146,24 +145,14 @@ class HomeActivity : AppCompatActivity() {
         val linearLayoutManager = LinearLayoutManager(this@HomeActivity)
         listStoryAdapter = ListStoryAdapter()
 
-        // Pager Load State
         listStoryAdapter.addLoadStateListener { loadState ->
-            if ((loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && listStoryAdapter.itemCount < 1) || loadState.source.refresh is LoadState.Error) {
-                // List empty or error
-                binding?.apply {
-//                    pageLoadingHandler(false)
-//                    tvNotFoundError.animateVisibility(true)
-//                    ivNotFoundError.animateVisibility(true)
-//                    rvStories.animateVisibility(false)
-                }
+            Log.d("LoadState", "Current ${loadState.source}")
+            if (loadState.source.refresh is LoadState.Loading) {
+                pageLoadingHandler(true)
+            } else if (loadState.source.refresh is LoadState.Error) {
+                pageLoadingHandler(false)
             } else {
-                // List not empty
-                binding?.apply {
-//                    pageLoadingHandler(true)
-//                    tvNotFoundError.animateVisibility(false)
-//                    ivNotFoundError.animateVisibility(false)
-//                    rvStories.animateVisibility(true)
-                }
+                pageLoadingHandler(false)
             }
             binding?.swipeRefresh?.isRefreshing = loadState.source.refresh is LoadState.Loading
         }
@@ -178,18 +167,10 @@ class HomeActivity : AppCompatActivity() {
                 )
                 layoutManager = linearLayoutManager
             }
-//            binding.rvStories.apply {
-//                layoutManager = LinearLayoutManager(this@HomeActivity)
-//                adapter = listStoryAdapter.withLoadStateFooter(
-//                    footer = LoadingStateAdapter {
-//                        listStoryAdapter.retry()
-//                    }
-//                )
-//                // setHasFixedSize(true)
-//            }
         } catch (e: NullPointerException) {
-            e.printStackTrace()
+            Log.d("Error", "E $e")
         }
+
 
         listStoryAdapter.setOnItemClickCallback(object : ListStoryAdapter.OnItemClickCallback {
             override fun onItemClicked(story: StoryItem) {
@@ -204,21 +185,6 @@ class HomeActivity : AppCompatActivity() {
         recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
     }
 
-//    private fun setRecycleViewData(listStoryData: List<StoryItem?>) {
-//        val listStoryAdapter = ListStoryAdapter()
-//        listStoryAdapter.submitList(listStoryData)
-//        binding.rvStories.apply {
-//            layoutManager = LinearLayoutManager(this@HomeActivity)
-//            adapter = listStoryAdapter
-//            setHasFixedSize(true)
-//        }
-//        listStoryAdapter.setOnItemClickCallback(object : ListStoryAdapter.OnItemClickCallback {
-//            override fun onItemClicked(story: StoryItem) {
-//                goToDetailStory(story)
-//            }
-//        })
-//    }
-
     private fun goToDetailStory(story: StoryItem?) {
         Intent(this@HomeActivity, DetailStoryActivity::class.java).apply {
             putExtra(DetailStoryActivity.EXTRA_DETAIL, story?.id)
@@ -229,6 +195,8 @@ class HomeActivity : AppCompatActivity() {
 
     private fun pageLoadingHandler(isLoading: Boolean) {
         binding.apply {
+            rvStories.isEnabled = !isLoading
+
             if (isLoading) {
                 viewLoading.apply {
                     ObjectAnimator
@@ -245,9 +213,5 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    companion object {
-        const val EXTRA_STORY = "extra_story"
     }
 }
