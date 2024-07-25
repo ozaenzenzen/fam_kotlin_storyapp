@@ -3,6 +3,7 @@ package com.example.famstoryappkotlin.ui.views.detailstory
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -31,8 +32,8 @@ class DetailStoryActivity : AppCompatActivity() {
 
     private var idStory: String? = null
 
-    private var lat: Double? = null
-    private var long: Double? = null
+//    private var lat: Double? = null
+//    private var long: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +45,9 @@ class DetailStoryActivity : AppCompatActivity() {
         setToolbar("Detail Story")
         setupViewModel()
 
+        var lat: Double? = null
+        var long: Double? = null
+
         lifecycleScope.launch {
             launch {
                 viewModel.getAuthenticationToken().collect() { token ->
@@ -51,9 +55,16 @@ class DetailStoryActivity : AppCompatActivity() {
                         viewModel.detailStory(it, idStory!!).collect { response ->
                             response.onSuccess { detailStoryData ->
                                 detailStoryData.let {
+                                    Log.d("location", "data : ${detailStoryData?.story?.lat}")
+                                    Log.d("location", "data : ${detailStoryData?.story?.lon}")
                                     if (detailStoryData?.story?.lat != null && detailStoryData?.story?.lon != null) {
                                         lat = detailStoryData?.story?.lat.toString().toDouble()
                                         long = detailStoryData?.story?.lon.toString().toDouble()
+                                        if (lat != null && long != null) {
+                                            binding.mapsButton.visibility = View.VISIBLE
+                                        } else {
+                                            binding.mapsButton.visibility = View.GONE
+                                        }
                                     }
                                     binding.tvDetailName.text = it.story?.name
                                     binding.tvDetailDescription.text = it.story?.description
@@ -72,11 +83,13 @@ class DetailStoryActivity : AppCompatActivity() {
         }
 
         binding.mapsButton.apply {
-            if (lat != null && long != null) {
-                visibility = View.VISIBLE
-            } else {
-                visibility = View.GONE
-            }
+//            Log.d("location1", "data : ${lat}")
+//            Log.d("location1", "data : ${long}")
+//            if (lat != null && long != null) {
+//                visibility = View.VISIBLE
+//            } else {
+//                visibility = View.GONE
+//            }
             setOnClickListener {
                 val intent = Intent(this@DetailStoryActivity, MapsActivity::class.java)
                 startActivity(intent)

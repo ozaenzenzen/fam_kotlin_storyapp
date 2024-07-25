@@ -48,4 +48,9 @@
     <string name="et_email_error_message">Alamat email tidak sesuai</string>
     <string name="et_password_error_message">Kata sandi harus lebih dari 8 karakter</string>
     <string name="title_activity_maps">MapsActivity</string>
+
+    <string name="share_location">Share Location</string>
+    <string name="please_activate_location_message">Please activate your location services</string>
+    <string name="location_permission_denied">Location permission not allowed</string>
+    <string name="location_permission_denied_action">Change Setting</string>
 </resources>

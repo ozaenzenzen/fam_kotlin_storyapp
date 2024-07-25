@@ -92,5 +92,6 @@ dependencies {
 
     //Paging 3
     implementation(libs.androidx.paging.runtime.ktx)
-    implementation("com.google.android.gms:play-services-maps:18.0.2")
+    implementation("com.google.android.gms:play-services-maps:18.0.0")
+    implementation("com.google.android.gms:play-services-location:18.0.0")
 }
