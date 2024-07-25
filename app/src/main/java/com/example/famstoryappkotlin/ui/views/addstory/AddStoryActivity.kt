@@ -308,8 +308,8 @@ class AddStoryActivity : AppCompatActivity() {
                                         it ?: "",
                                         multipartBody,
                                         requestBody,
-                                        location?.latitude.toString().toRequestBody("text/plain".toMediaType()),
-                                        location?.longitude.toString().toRequestBody("text/plain".toMediaType()),
+                                        if (location == null) null else location?.latitude.toString().toRequestBody("text/plain".toMediaType()),
+                                        if (location == null) null else location?.longitude.toString().toRequestBody("text/plain".toMediaType()),
                                     )
                                         .collect { response ->
                                             response.onSuccess { data ->
@@ -321,6 +321,8 @@ class AddStoryActivity : AppCompatActivity() {
                                                             "Add story berhasil",
                                                             "Kembali",
                                                         ) {
+                                                            val intent = Intent()
+                                                            setResult(RESULT_OK, intent)
                                                             finish()
                                                         }
                                                     } else {

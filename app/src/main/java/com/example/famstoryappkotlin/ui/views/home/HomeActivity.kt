@@ -4,9 +4,11 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -40,6 +42,14 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var listStoryAdapter: ListStoryAdapter
 
+    private val startActivityForUpload =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            Log.d("result.resultCode", "value ${result.resultCode}")
+            if (result.resultCode == RESULT_OK) {
+                lifecycleHandlerGetAllStories()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -55,7 +65,8 @@ class HomeActivity : AppCompatActivity() {
 
         binding.fabCreateStory.setOnClickListener {
             val intent = Intent(this@HomeActivity, AddStoryActivity::class.java)
-            startActivity(intent)
+            // startActivity(intent)
+            startActivityForUpload.launch(intent)
         }
     }
 
