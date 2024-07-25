@@ -9,6 +9,7 @@
     <string name="greeting">Halo %1$s,</string>
     <string name="logout">Keluar</string>
     <string name="retry">Coba lagi</string>
+    <string name="openmaps">Buka Maps</string>
 
     //Activity Main
     <string name="title_welcome_page">Selamat datang di Post Story!</string>
@@ -46,4 +47,5 @@
     //Error Text
     <string name="et_email_error_message">Alamat email tidak sesuai</string>
     <string name="et_password_error_message">Kata sandi harus lebih dari 8 karakter</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

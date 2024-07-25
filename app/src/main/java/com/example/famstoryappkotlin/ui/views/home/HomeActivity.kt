@@ -10,9 +10,11 @@ import android.view.View
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.famgithubuser1.data.retrofit.ApiConfig
 import com.example.famstoryappkotlin.R
 import com.example.famstoryappkotlin.data.factory.ViewModelFactory
@@ -34,6 +36,10 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var authRepository: AuthRepository
     private lateinit var storyRepository: StoryRepository
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var listStoryAdapter: ListStoryAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,17 +49,18 @@ class HomeActivity : AppCompatActivity() {
         setToolbar("For Your Page")
         setupViewModel()
 
+        binding.swipeRefresh.setOnRefreshListener {
+            pageLoadingHandler(true)
+            lifecycleHandler()
+            binding.swipeRefresh.isRefreshing = false
+        }
+
+        setRecycleViewData()
         lifecycleHandler()
 
         binding.fabCreateStory.setOnClickListener {
             val intent = Intent(this@HomeActivity, AddStoryActivity::class.java)
             startActivity(intent)
-        }
-
-        binding.swipeRefresh.setOnRefreshListener {
-            pageLoadingHandler(true)
-            lifecycleHandler()
-            binding.swipeRefresh.isRefreshing = false
         }
     }
 
@@ -66,7 +73,7 @@ class HomeActivity : AppCompatActivity() {
                         response.onSuccess { data ->
                             val emptyList: List<StoryItem?>? = emptyList()
                             pageLoadingHandler(false)
-                            setRecycleViewData(token!!, data)
+                            updateRecyclerViewData(data)
                         }
                         response.onFailure {
                             pageLoadingHandler(false)
@@ -126,23 +133,62 @@ class HomeActivity : AppCompatActivity() {
         ).get(HomeViewModel::class.java)
     }
 
-    private fun setRecycleViewData(token: String, listStoryData: PagingData<StoryItem>) {
-        val listStoryAdapter = ListStoryAdapter()
-        listStoryAdapter.submitData(lifecycle, listStoryData)
-        binding.rvStories.apply {
-            layoutManager = LinearLayoutManager(this@HomeActivity)
-            adapter = listStoryAdapter.withLoadStateFooter(
-                footer = LoadingStateAdapter {
-                    listStoryAdapter.retry()
+    private fun setRecycleViewData() {
+        listStoryAdapter = ListStoryAdapter()
+//        listStoryAdapter.submitData(lifecycle, listStoryData)
+        listStoryAdapter.addLoadStateListener { loadState ->
+            if ((loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && listStoryAdapter.itemCount < 1) || loadState.source.refresh is LoadState.Error) {
+                // List empty or error
+                binding?.apply {
+//                    tvNotFoundError.animateVisibility(true)
+//                    ivNotFoundError.animateVisibility(true)
+//                    rvStories.animateVisibility(false)
                 }
-            )
-             setHasFixedSize(true)
+            } else {
+                // List not empty
+                binding?.apply {
+//                    tvNotFoundError.animateVisibility(false)
+//                    ivNotFoundError.animateVisibility(false)
+//                    rvStories.animateVisibility(true)
+                }
+            }
+            binding?.swipeRefresh?.isRefreshing = loadState.source.refresh is LoadState.Loading
         }
+
+        try {
+            recyclerView = binding.rvStories!!
+            recyclerView.apply {
+                adapter = listStoryAdapter.withLoadStateFooter(
+                    footer = LoadingStateAdapter {
+                        listStoryAdapter.retry()
+                    }
+                )
+                layoutManager = LinearLayoutManager(this@HomeActivity)
+            }
+//            binding.rvStories.apply {
+//                layoutManager = LinearLayoutManager(this@HomeActivity)
+//                adapter = listStoryAdapter.withLoadStateFooter(
+//                    footer = LoadingStateAdapter {
+//                        listStoryAdapter.retry()
+//                    }
+//                )
+//                // setHasFixedSize(true)
+//            }
+        } catch (e: NullPointerException) {
+            e.printStackTrace()
+        }
+
         listStoryAdapter.setOnItemClickCallback(object : ListStoryAdapter.OnItemClickCallback {
             override fun onItemClicked(story: StoryItem) {
                 goToDetailStory(story)
             }
         })
+    }
+
+    private fun updateRecyclerViewData(listStoryData: PagingData<StoryItem>) {
+        val recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()
+        listStoryAdapter.submitData(lifecycle, listStoryData)
+        recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
     }
 
 //    private fun setRecycleViewData(listStoryData: List<StoryItem?>) {

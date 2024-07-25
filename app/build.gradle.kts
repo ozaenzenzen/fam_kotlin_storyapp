@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -91,4 +92,5 @@ dependencies {
 
     //Paging 3
     implementation(libs.androidx.paging.runtime.ktx)
+    implementation("com.google.android.gms:play-services-maps:18.0.2")
 }
