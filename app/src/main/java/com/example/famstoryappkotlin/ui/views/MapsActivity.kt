@@ -37,6 +37,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setToolbar("Maps Screen")
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     private fun setToolbar(title: String) {
         setSupportActionBar(binding.toolbar.toolbar)
         supportActionBar?.apply {
