@@ -15,6 +15,7 @@ import com.example.famstoryappkotlin.data.local.preferences.UserDataPreferences
 import com.example.famstoryappkotlin.data.local.preferences.dataStore
 import com.example.famstoryappkotlin.data.repository.AuthRepository
 import com.example.famstoryappkotlin.data.repository.StoryRepository
+import com.example.famstoryappkotlin.data.response.DetailStoryResponseModel
 import com.example.famstoryappkotlin.databinding.ActivityDetailStoryBinding
 import com.example.famstoryappkotlin.ui.views.MapsActivity
 import com.example.famstoryappkotlin.ui.views.addstory.AddStoryActivity
@@ -45,27 +46,14 @@ class DetailStoryActivity : AppCompatActivity() {
         setToolbar("Detail Story")
         setupViewModel()
 
-        var lat: Double? = null
-        var long: Double? = null
-
         lifecycleScope.launch {
             launch {
-                viewModel.getAuthenticationToken().collect() { token ->
+                viewModel.getAuthenticationToken().collect { token ->
                     token?.let {
                         viewModel.detailStory(it, idStory!!).collect { response ->
                             response.onSuccess { detailStoryData ->
-                                detailStoryData.let {
-                                    Log.d("location", "data : ${detailStoryData?.story?.lat}")
-                                    Log.d("location", "data : ${detailStoryData?.story?.lon}")
-                                    if (detailStoryData?.story?.lat != null && detailStoryData?.story?.lon != null) {
-                                        lat = detailStoryData?.story?.lat.toString().toDouble()
-                                        long = detailStoryData?.story?.lon.toString().toDouble()
-                                        if (lat != null && long != null) {
-                                            binding.mapsButton.visibility = View.VISIBLE
-                                        } else {
-                                            binding.mapsButton.visibility = View.GONE
-                                        }
-                                    }
+                                detailStoryData.let { it ->
+                                    checkIsAnyLocationValue(it)
                                     binding.tvDetailName.text = it.story?.name
                                     binding.tvDetailDescription.text = it.story?.description
                                     Glide
@@ -83,17 +71,22 @@ class DetailStoryActivity : AppCompatActivity() {
         }
 
         binding.mapsButton.apply {
-//            Log.d("location1", "data : ${lat}")
-//            Log.d("location1", "data : ${long}")
-//            if (lat != null && long != null) {
-//                visibility = View.VISIBLE
-//            } else {
-//                visibility = View.GONE
-//            }
             setOnClickListener {
                 val intent = Intent(this@DetailStoryActivity, MapsActivity::class.java)
                 startActivity(intent)
             }
+        }
+    }
+
+    private fun checkIsAnyLocationValue(detailStoryData: DetailStoryResponseModel) {
+        var lat: Double? = null
+        var long: Double? = null
+        Log.d("location", "data lat : ${detailStoryData?.story?.lat}")
+        Log.d("location", "data lon : ${detailStoryData?.story?.lon}")
+        if (detailStoryData?.story?.lat != null && detailStoryData?.story?.lon != null) {
+            binding.mapsButton.visibility = View.VISIBLE
+        } else {
+            binding.mapsButton.visibility = View.GONE
         }
     }
 
