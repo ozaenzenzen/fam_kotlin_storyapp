@@ -1,0 +1,96 @@
+{
+  "error": false,
+  "message": "Stories fetched successfully",
+  "listStory": [
+    {
+      "id": "story-sLTYKRSqrpuykRIc",
+      "name": "test",
+      "description": "loc",
+      "photoUrl": "https://story-api.dicoding.dev/images/stories/photos-1721908685696_1d602c5f081192ab64ab.jpg",
+      "createdAt": "2024-07-25T11:58:05.698Z",
+      "lat": -6.225338,
+      "lon": 106.9566299
+    },
+    {
+      "id": "story-8aml5GNSAPajsou8",
+      "name": "test",
+      "description": "l1",
+      "photoUrl": "https://story-api.dicoding.dev/images/stories/photos-1721897652086_3363a699b8244e49a019.jpg",
+      "createdAt": "2024-07-25T08:54:12.089Z",
+      "lat": -6.1779606,
+      "lon": 106.8807062
+    },
+    {
+      "id": "story-ifmCTI4ZAdBFTrRr",
+      "name": "Dicoding",
+      "description": "If our economic condition is difficult, it is normal to feel shy or minder. But don’t stop just right there. Find opportunities and prepare yourselves to grasp them. Keep going forward and never give up.",
+      "photoUrl": "https://story-api.dicoding.dev/images/stories/photos-1687836092790_A_UcH6BZ.jpg",
+      "createdAt": "2023-06-27T03:21:32.792Z",
+      "lat": -4.8514038,
+      "lon": 127.6743234
+    },
+    {
+      "id": "story-Ef7Ih90hOiA5EClr",
+      "name": "Dicoding",
+      "description": "Don’t give up! Jangan menyerah dan tetap terus belajar dan berusaha. Jangan berpaku dengan kondisi disabilitas. Berkonsentrasi dengan peluang dan kelebihan itu adalah sebuah keharusan. Allah tidak akan mengubah nasib suatu kaum bilamana kaum tersebut tidak berusaha mengubahnya. Bahkan Rasulullah lebih menyukai orang yang bekerja keras dan tidak berpangku tangan. Jadi niatkan semua karena ibadah.",
+      "photoUrl": "https://story-api.dicoding.dev/images/stories/photos-1687836004165_c999T3Gc.jpg",
+      "createdAt": "2023-06-27T03:20:04.169Z",
+      "lat": -8.500314,
+      "lon": 140.365956
+    },
+    {
+      "id": "story-JpTtDha5AxTFJT9q",
+      "name": "Dicoding",
+      "description": "1. Miliki Motivasi yang Tinggi 2. Bersikap Persisten saat dalam Berlatih dan Menghadapi Tantangan 3. Selalu Percaya Diri dan Mencari Apa Passion Kita",
+      "photoUrl": "https://story-api.dicoding.dev/images/stories/photos-1687835950650_XvmTvFBv.jpg",
+      "createdAt": "2023-06-27T03:19:10.651Z",
+      "lat": -8.8540315,
+      "lon": 121.6438983
+    },
+    {
+      "id": "story-udCROx4nseim_NPM",
+      "name": "Dicoding",
+      "description": "Bangkit adalah kesempatan luar biasa. Semua yang saya butuhkan untuk modal saya terjun ke dunia profesional, diberikan oleh Bangkit. Saya tidak hanya belajar soal IT. Di sini saya mampu melatih soft skill dan mendapatkan ruang yang cukup untuk berkolaborasi.",
+      "photoUrl": "https://story-api.dicoding.dev/images/stories/photos-1687835898109_fthlWLBp.jpg",
+      "createdAt": "2023-06-27T03:18:18.111Z",
+      "lat": -8.5876608,
+      "lon": 116.0959938
+    },
+    {
+      "id": "story-nNGqhWKAdLvU-GYd",
+      "name": "Dicoding",
+      "description": "Sebagai pendidik sejak 2013,  saya ingin memotivasi mahasiswa agar cinta programming. Caranya, ya dengan menunjukkan saya programmer yang kapabel.",
+      "photoUrl": "https://story-api.dicoding.dev/images/stories/photos-1687835837847_AeuwHBJl.png",
+      "createdAt": "2023-06-27T03:17:17.848Z",
+      "lat": -5.1113133,
+      "lon": 119.3202264
+    },
+    {
+      "id": "story-k_APX30OqGpcy1TG",
+      "name": "Dicoding",
+      "description": "Di tempat saya kerja sekarang pada saat itu memang sedang transisi ke penggunaan bahasa pemrograman Kotlin. Ternyata di saat bersamaan kelas Dicoding membahas Kotlin, jadi saya bisa langsung praktek. Materi yang diberikan oleh beasiswa Baparekraf dan Dicoding memang sesuai dengan kebutuhan industri.",
+      "photoUrl": "https://story-api.dicoding.dev/images/stories/photos-1687835748082_eBPHUFTZ.jpg",
+      "createdAt": "2023-06-27T03:15:48.084Z",
+      "lat": -1.1744302,
+      "lon": 116.7593468
+    },
+    {
+      "id": "story-M7ieOA-zkZBDP6UC",
+      "name": "Dicoding",
+      "description": "Dampak dari beasiswa ini adalah, kualitas kode saya menjadi lebih bagus, ilmu yang didapat bisa langsung diimplementasikan di proses produksi.",
+      "photoUrl": "https://story-api.dicoding.dev/images/stories/photos-1687835672101_7Qn7QPsP.jpg",
+      "createdAt": "2023-06-27T03:14:32.106Z",
+      "lat": -7.2754417,
+      "lon": 112.6302826
+    },
+    {
+      "id": "story-aK6FDM-OL9VbQVo9",
+      "name": "Dicoding",
+      "description": "Pengalaman belajar di Dicoding waktu itu sangat mengesankan. Materinya relevan karena Dicoding adalah  Google Authorized Training Partner. Semua modulnya telah diverifikasi langsung oleh Google. Apalagi, penyampaian materi juga luwes dalam bahasa Indonesia.",
+      "photoUrl": "https://story-api.dicoding.dev/images/stories/photos-1687835610920_GBYv03RV.png",
+      "createdAt": "2023-06-27T03:13:30.924Z",
+      "lat": -6.9033625,
+      "lon": 107.6019579
+    }
+  ]
+}

@@ -1,6 +1,9 @@
 package com.example.famstoryappkotlin.data.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
 import com.example.famgithubuser1.data.retrofit.ApiService
 import com.example.famstoryappkotlin.data.local.preferences.UserDataPreferences
 import com.example.famstoryappkotlin.data.response.LoginResponseModel
@@ -42,5 +45,14 @@ class AuthRepository(
 
     fun getAuthenticationToken(): Flow<String?> {
         return userDataPreferences.getAuthenticationToken()
+    }
+
+    fun getAuthenticationTokenLiveData(): LiveData<Result<String?>> = liveData {
+        try {
+            val data = userDataPreferences.getAuthenticationToken().asLiveData().value
+            emit(Result.success(data))
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
     }
 }

@@ -1,7 +1,9 @@
 package com.example.famstoryappkotlin.data.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.asFlow
+import androidx.lifecycle.liveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -13,6 +15,7 @@ import com.example.famstoryappkotlin.data.response.DetailStoryResponseModel
 import com.example.famstoryappkotlin.data.response.GetAllStoryResponseModel
 import com.example.famstoryappkotlin.data.response.LoginResponseModel
 import com.example.famstoryappkotlin.data.response.StoryItem
+import com.example.famstoryappkotlin.utils.ResultState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
@@ -73,7 +76,7 @@ class StoryRepository(private val apiService: ApiService) {
         }
     }
 
-    fun getAllStory3(token: String): Flow<PagingData<StoryItem>> {
+    fun getAllStoryLiveData(token: String): LiveData<PagingData<StoryItem>> = liveData {
         val bearerToken = "Bearer $token"
         val pager = Pager(
             config = PagingConfig(
@@ -82,10 +85,29 @@ class StoryRepository(private val apiService: ApiService) {
             pagingSourceFactory = {
                 StoryPagingSource(apiService = apiService, bearerToken)
             }
-        ).flow
-
-        return pager
+        ).liveData.value
     }
+
+    fun getAllStoryList(token: String): Flow<ResultState<PagingData<StoryItem>>> = flow {
+        try {
+            val bearerToken = "Bearer $token"
+            val pager = Pager(
+                config = PagingConfig(
+                    pageSize = 5,
+                ),
+                pagingSourceFactory = {
+                    StoryPagingSource(apiService = apiService, bearerToken)
+                }
+            ).flow.collect { data ->
+                emit(ResultState.Success(data))
+            }
+
+        } catch (e: Exception) {
+            Log.e("getAllStory", e.message.toString())
+            emit(ResultState.Error(e.message.toString()))
+        }
+    }
+
 
     fun getAllStoryWithLoc(token: String): Flow<Result<GetAllStoryResponseModel>> = flow {
         try {
