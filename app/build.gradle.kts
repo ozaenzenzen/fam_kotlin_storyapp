@@ -94,4 +94,40 @@ dependencies {
     implementation(libs.androidx.paging.runtime.ktx)
     implementation("com.google.android.gms:play-services-maps:18.0.0")
     implementation("com.google.android.gms:play-services-location:18.0.0")
+
+    //------------------FOR TESTING------------------FOR TESTING------------------FOR TESTING------------------
+
+    //testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    //coroutine support
+    implementation(libs.androidx.lifecycle.viewmodel.ktx) //viewModelScope
+    implementation(libs.androidx.room.ktx)
+
+    //mockito
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+
+    //special testing
+    testImplementation(libs.androidx.core.testing) // InstantTaskExecutorRule
+    testImplementation(libs.kotlinx.coroutines.test) //TestCoroutineDispatcher
+
+    //special instrumentation testing
+    androidTestImplementation(libs.androidx.core.testing) // InstantTaskExecutorRule
+    androidTestImplementation(libs.kotlinx.coroutines.test) //TestDispatcher
+
+    //TestCoroutineDispatcher
+    debugImplementation(libs.androidx.fragment.testing) //launchFragmentInContainer
+
+    //mock web server
+    androidTestImplementation(libs.mockwebserver)
+    androidTestImplementation(libs.okhttp3.okhttp.tls)
+
+    androidTestImplementation(libs.espresso.contrib) //RecyclerViewActions
+
+    androidTestImplementation(libs.espresso.intents) //IntentsTestRule
+
+    implementation(libs.androidx.espresso.idling.resource)
 }

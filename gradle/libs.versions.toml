@@ -1,6 +1,7 @@
 [versions]
-lifecycleLivedataKtx = "2.6.2"
 lifecycleViewmodelKtx = "2.6.2"
+lifecycleLivedataKtx = "2.6.2"
+
 roomCompiler = "2.5.2"
 roomRuntime = "2.5.2"
 cameraxVersion = "1.2.3"
@@ -15,6 +16,21 @@ googleAndroidLibrariesMapsplatformSecretsGradlePluginVersion = "2.0.1"
 playServicesMapsVersion = "19.0.0"
 appcompatVersion = "1.7.0"
 constraintlayoutVersion = "2.1.4"
+
+roomKtx = "2.5.2"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+mockitoCore = "5.6.0"
+mockitoInline = "5.2.0"
+coreTesting = "2.2.0"
+kotlinxCoroutinesTest = "1.6.4"
+fragmentTesting = "1.4.1"
+mockwebserver = "4.9.3"
+okhttpTls = "4.9.3"
+espressoContrib = "3.0.2"
+espressoIntents = "3.4.0"
+espressoIdlingResource = "3.4.0"
 
 
 [libraries]
@@ -34,6 +50,21 @@ androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", v
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMapsVersion" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayoutVersion" }
+
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+androidx-fragment-testing = { module = "androidx.fragment:fragment-testing", version.ref = "fragmentTesting" }
+mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "mockwebserver" }
+okhttp3-okhttp-tls = { module = "com.squareup.okhttp3:okhttp-tls", version.ref = "okhttpTls" }
+espresso-contrib = { module = "com.android.support.test.espresso:espresso-contrib", version.ref = "espressoContrib" }
+espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoIntents" }
+androidx-espresso-idling-resource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "espressoIdlingResource" }
 
 
 [plugins]
