@@ -14,6 +14,7 @@ import com.example.famstoryappkotlin.utils.DataDummy
 import com.example.famstoryappkotlin.utils.PagedTestDataSource
 import com.example.famstoryappkotlin.utils.ResultState
 import com.example.famstoryappkotlin.utils.getOrAwaitValue
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -62,7 +63,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `when Get Authentication Token Should Not Null and Return Success`() {
+    fun `when Get Authentication Token Should Not Null and Return Success`() = runTest {
         val expectedToken = MutableLiveData<Result<String?>>()
         expectedToken.value = Result.success(dummyToken)
 
@@ -73,13 +74,12 @@ class HomeViewModelTest {
 
         Assert.assertNotNull(actualToken)
         Assert.assertTrue(actualToken is Result)
-        // Assert.assertEquals(dummyNews.size, (actualNews as ResultState.Success).data.size)
+        Assert.assertEquals(actualToken, expectedToken.value)
     }
 
     @Test
-    fun `when Get All Stories Should Not Null and Return Success2`() = runTest {
-        val expectedStory = DataDummy.generateDummyStoryEntity()
-        val data = PagedTestDataSource.snapshot(expectedStory)
+    fun `when Get All Stories (normal flow) Should Not Null and Return Success`() = runTest {
+        val data = PagedTestDataSource.snapshot(dummyStory)
 
         val stories = MutableLiveData<PagingData<StoryItem>>()
         stories.value = data
@@ -99,13 +99,69 @@ class HomeViewModelTest {
 
         Mockito.verify(homeViewModelForStory).getAllStoryLiveData(dummyToken)
         Assert.assertNotNull(differ.snapshot())
-        Assert.assertEquals(expectedStory.size, differ.snapshot().size)
+        Assert.assertEquals(dummyStory.size, differ.snapshot().size)
     }
-//
+
     private val noopListUpdateCallback = object : ListUpdateCallback {
         override fun onInserted(position: Int, count: Int) {}
         override fun onRemoved(position: Int, count: Int) {}
         override fun onMoved(fromPosition: Int, toPosition: Int) {}
         override fun onChanged(position: Int, count: Int, payload: Any?) {}
+
+    }
+
+    @Test
+    fun `verify Get All Stories (size & first data) and Should Not Return Null`() = runTest {
+        val data = PagedTestDataSource.snapshot(dummyStory)
+
+        val stories = MutableLiveData<PagingData<StoryItem>>()
+        stories.value = data
+
+        `when`(homeViewModelForStory.getAllStoryLiveData(dummyToken)).thenReturn(stories)
+        val actualStories = homeViewModelForStory.getAllStoryLiveData(dummyToken).getOrAwaitValue()
+
+        val differ = AsyncPagingDataDiffer(
+            diffCallback = ListStoryAdapter.DIFF_CALLBACK,
+            updateCallback = noopListUpdateCallback,
+            mainDispatcher = Dispatchers.Unconfined,
+            workerDispatcher = Dispatchers.Unconfined,
+        )
+        differ.submitData(actualStories)
+
+        advanceUntilIdle()
+
+        Mockito.verify(homeViewModelForStory).getAllStoryLiveData(dummyToken)
+
+        Assert.assertNotNull(differ.snapshot())
+        Assert.assertEquals(dummyStory.size, differ.snapshot().size)
+        Assert.assertEquals(dummyStory[0].name, differ.snapshot()[0]?.name)
+    }
+
+    //    @OptIn(ExperimentalPagingApi::class, ExperimentalCoroutinesApi::class)
+    @Test
+    fun `when Get All Stories is Empty Should Not return Null`() = runTest {
+        val data = PagedTestDataSource.snapshot(listOf())
+
+        val stories = MutableLiveData<PagingData<StoryItem>>()
+        stories.value = data
+
+        `when`(homeViewModelForStory.getAllStoryLiveData(dummyToken)).thenReturn(stories)
+        val actualStories = homeViewModelForStory.getAllStoryLiveData(dummyToken).getOrAwaitValue()
+
+        val differ = AsyncPagingDataDiffer(
+            diffCallback = ListStoryAdapter.DIFF_CALLBACK,
+            updateCallback = noopListUpdateCallback,
+            mainDispatcher = Dispatchers.Unconfined,
+            workerDispatcher = Dispatchers.Unconfined,
+        )
+        differ.submitData(actualStories)
+
+        advanceUntilIdle()
+
+        Mockito.verify(homeViewModelForStory).getAllStoryLiveData(dummyToken)
+
+        Assert.assertNotNull(differ.snapshot())
+        Assert.assertTrue(differ.snapshot().isEmpty())
+        print("Empty list: ${differ.snapshot().size}")
     }
 }
