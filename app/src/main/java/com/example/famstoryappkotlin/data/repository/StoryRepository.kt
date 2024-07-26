@@ -87,6 +87,17 @@ class StoryRepository(private val apiService: ApiService) {
         return pager
     }
 
+    fun getAllStoryWithLoc(token: String): Flow<Result<GetAllStoryResponseModel>> = flow {
+        try {
+            val bearerToken = "Bearer $token"
+            val response = apiService.getAllStory(bearerToken, size = 30, location = 1)
+            emit(Result.success(response))
+        } catch (e: Exception) {
+            Log.e("getAllStory", e.message.toString())
+            emit(Result.failure(e))
+        }
+    }
+
     fun detailStory(token: String, id: String): Flow<Result<DetailStoryResponseModel>> = flow {
         try {
             val bearerToken = "Bearer $token"

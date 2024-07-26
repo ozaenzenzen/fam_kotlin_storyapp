@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/all_location"
+        android:icon="@drawable/ic_baseline_lock_24"
+        android:title="All Location" />
+    <item
         android:id="@+id/logout"
         android:icon="@drawable/ic_baseline_person_24"
         android:title="Logout" />

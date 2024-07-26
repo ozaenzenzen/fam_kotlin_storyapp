@@ -9,6 +9,7 @@ import com.example.famstoryappkotlin.ui.views.detailstory.DetailStoryViewModel
 import com.example.famstoryappkotlin.ui.views.home.HomeViewModel
 import com.example.famstoryappkotlin.ui.views.login.LoginViewModel
 import com.example.famstoryappkotlin.ui.views.main.MainViewModel
+import com.example.famstoryappkotlin.ui.views.maps.MapsViewModel
 import com.example.famstoryappkotlin.ui.views.register.RegisterViewModel
 
 class ViewModelFactory(
@@ -29,6 +30,8 @@ class ViewModelFactory(
             return AddStoryViewModel(authRepository, storyRepository) as T
         } else if (modelClass.isAssignableFrom(DetailStoryViewModel::class.java)) {
             return DetailStoryViewModel(authRepository, storyRepository) as T
+        } else if (modelClass.isAssignableFrom(MapsViewModel::class.java)) {
+            return MapsViewModel(authRepository, storyRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

@@ -17,10 +17,7 @@ import com.example.famstoryappkotlin.data.repository.AuthRepository
 import com.example.famstoryappkotlin.data.repository.StoryRepository
 import com.example.famstoryappkotlin.data.response.DetailStoryResponseModel
 import com.example.famstoryappkotlin.databinding.ActivityDetailStoryBinding
-import com.example.famstoryappkotlin.ui.views.MapsActivity
-import com.example.famstoryappkotlin.ui.views.addstory.AddStoryActivity
-import com.example.famstoryappkotlin.ui.views.home.HomeViewModel
-import kotlinx.coroutines.flow.collect
+import com.example.famstoryappkotlin.ui.views.maps.MapsActivity
 import kotlinx.coroutines.launch
 
 class DetailStoryActivity : AppCompatActivity() {
@@ -77,7 +74,6 @@ class DetailStoryActivity : AppCompatActivity() {
                 }.also {
                     startActivity(it)
                 }
-
             }
         }
     }

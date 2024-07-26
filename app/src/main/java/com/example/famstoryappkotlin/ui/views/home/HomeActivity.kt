@@ -29,6 +29,7 @@ import com.example.famstoryappkotlin.databinding.ActivityHomeBinding
 import com.example.famstoryappkotlin.ui.views.addstory.AddStoryActivity
 import com.example.famstoryappkotlin.ui.views.detailstory.DetailStoryActivity
 import com.example.famstoryappkotlin.ui.views.main.MainActivity
+import com.example.famstoryappkotlin.ui.views.maps.MapsActivity
 import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {
@@ -105,6 +106,13 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.all_location -> {
+                Intent(this@HomeActivity, MapsActivity::class.java).also { it ->
+                    startActivity(it)
+                }
+                return true
+            }
+
             R.id.logout -> {
                 viewModel.saveAuthenticationToken("")
                 Intent(this@HomeActivity, MainActivity::class.java).also { intent ->
