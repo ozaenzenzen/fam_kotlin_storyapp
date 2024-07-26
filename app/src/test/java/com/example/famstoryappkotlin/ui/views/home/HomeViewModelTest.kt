@@ -49,17 +49,14 @@ class HomeViewModelTest {
     @Mock
     private lateinit var authRepository: AuthRepository
 
-    private lateinit var homeViewModelForAuth: HomeViewModel
-
-    @Mock
-    private lateinit var homeViewModelForStory: HomeViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     private val dummyStory = DataDummy.generateDummyStoryEntity()
     private val dummyToken = DataDummy.generateDummyTokenEntity()
 
     @Before
     fun setUp() {
-        homeViewModelForAuth = HomeViewModel(authRepository, storyRepository)
+        homeViewModel = HomeViewModel(authRepository, storyRepository)
     }
 
     @Test
@@ -69,7 +66,7 @@ class HomeViewModelTest {
 
         `when`(authRepository.getAuthenticationTokenLiveData()).thenReturn(expectedToken)
 
-        val actualToken = homeViewModelForAuth.getAuthenticationTokenLiveData().getOrAwaitValue()
+        val actualToken = homeViewModel.getAuthenticationTokenLiveData().getOrAwaitValue()
         Mockito.verify(authRepository).getAuthenticationTokenLiveData()
 
         Assert.assertNotNull(actualToken)
@@ -84,9 +81,9 @@ class HomeViewModelTest {
         val stories = MutableLiveData<PagingData<StoryItem>>()
         stories.value = data
 
-        `when`(homeViewModelForStory.getAllStoryLiveData(dummyToken)).thenReturn(stories)
+        `when`(homeViewModel.getAllStoryLiveData(dummyToken)).thenReturn(stories)
 
-        val actualStories = homeViewModelForStory.getAllStoryLiveData(dummyToken).getOrAwaitValue()
+        val actualStories = homeViewModel.getAllStoryLiveData(dummyToken).getOrAwaitValue()
         val differ = AsyncPagingDataDiffer(
             diffCallback = ListStoryAdapter.DIFF_CALLBACK,
             updateCallback = noopListUpdateCallback,
@@ -97,7 +94,6 @@ class HomeViewModelTest {
 
         advanceUntilIdle()
 
-        Mockito.verify(homeViewModelForStory).getAllStoryLiveData(dummyToken)
         Assert.assertNotNull(differ.snapshot())
         Assert.assertEquals(dummyStory.size, differ.snapshot().size)
     }
@@ -117,8 +113,8 @@ class HomeViewModelTest {
         val stories = MutableLiveData<PagingData<StoryItem>>()
         stories.value = data
 
-        `when`(homeViewModelForStory.getAllStoryLiveData(dummyToken)).thenReturn(stories)
-        val actualStories = homeViewModelForStory.getAllStoryLiveData(dummyToken).getOrAwaitValue()
+        `when`(homeViewModel.getAllStoryLiveData(dummyToken)).thenReturn(stories)
+        val actualStories = homeViewModel.getAllStoryLiveData(dummyToken).getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = ListStoryAdapter.DIFF_CALLBACK,
@@ -129,8 +125,6 @@ class HomeViewModelTest {
         differ.submitData(actualStories)
 
         advanceUntilIdle()
-
-        Mockito.verify(homeViewModelForStory).getAllStoryLiveData(dummyToken)
 
         Assert.assertNotNull(differ.snapshot())
         Assert.assertEquals(dummyStory.size, differ.snapshot().size)
@@ -145,8 +139,8 @@ class HomeViewModelTest {
         val stories = MutableLiveData<PagingData<StoryItem>>()
         stories.value = data
 
-        `when`(homeViewModelForStory.getAllStoryLiveData(dummyToken)).thenReturn(stories)
-        val actualStories = homeViewModelForStory.getAllStoryLiveData(dummyToken).getOrAwaitValue()
+        `when`(homeViewModel.getAllStoryLiveData(dummyToken)).thenReturn(stories)
+        val actualStories = homeViewModel.getAllStoryLiveData(dummyToken).getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = ListStoryAdapter.DIFF_CALLBACK,
@@ -157,8 +151,6 @@ class HomeViewModelTest {
         differ.submitData(actualStories)
 
         advanceUntilIdle()
-
-        Mockito.verify(homeViewModelForStory).getAllStoryLiveData(dummyToken)
 
         Assert.assertNotNull(differ.snapshot())
         Assert.assertTrue(differ.snapshot().isEmpty())
